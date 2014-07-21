@@ -5,7 +5,7 @@ namespace Application\Core\File\Derivative;
 use Imagine\Imagick\Imagine;
 use Imagine\Image\Box;
 
-use Detail\File\FileInterface;
+use Detail\File\Item\ItemInterface;
 
 class PreviewImageProvider
 {
@@ -29,6 +29,9 @@ class PreviewImageProvider
      */
     protected $format = 'jpg';
 
+    /**
+     * @var string
+     */
     protected $inputFilter;
 
     /**
@@ -129,13 +132,13 @@ class PreviewImageProvider
         }
     }
 
-    public function createDerivative(FileInterface $file)
+    public function createDerivative(ItemInterface $file)
     {
         $inputFilter = $this->getInputFilter();
 
         $imagine = new Imagine();
         $image = $imagine->open(
-            $file->getPath()->getPathname() . ($inputFilter !== null ? '[' . $inputFilter . ']' : '')
+            $file->getFile()->getPathname() . ($inputFilter !== null ? '[' . $inputFilter . ']' : '')
         );
 
         /** @todo Force/convert sRGB */
