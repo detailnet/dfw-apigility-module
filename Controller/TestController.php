@@ -62,7 +62,6 @@ class TestController extends AbstractActionController implements
         $session->pageCounter += 1;
 
         $uploads = $this->getFilesystemService()->get('upload');
-        $images = $this->getFilesystemService()->get('image');
 
         $fileName = 'test.txt';
         $fileContents = 'Hello ' . $session->pageCounter;
@@ -72,7 +71,7 @@ class TestController extends AbstractActionController implements
         $file->setContent($fileContents); // Will actually write the file to the filesystem
 
         // ...or this.
-        $images->createFile($fileName)->setContent($fileContents);
+        $uploads->createFile($fileName)->setContent($fileContents);
 
         $this->log(
             sprintf(
