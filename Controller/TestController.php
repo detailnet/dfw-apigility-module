@@ -61,7 +61,7 @@ class TestController extends AbstractActionController implements
 
         $session->pageCounter += 1;
 
-        $uploads = $this->getFilesystemService()->get('upload');
+        $uploads = $this->getFilesystemService()->get('uploads');
 
         $fileName = 'test.txt';
         $fileContents = 'Hello ' . $session->pageCounter;
