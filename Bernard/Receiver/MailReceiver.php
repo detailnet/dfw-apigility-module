@@ -28,7 +28,7 @@ class MailReceiver extends AbstractReceiver
         $this->bernardService = $bernardService;
     }
 
-    public function mail(BernardMessage $message)
+    public function receive(BernardMessage $message)
     {
         try {
             $mailMessage = $this->getBernardService()->decodeMessage($message);
