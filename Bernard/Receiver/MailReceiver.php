@@ -2,9 +2,9 @@
 
 namespace Application\Core\Bernard\Receiver;
 
+use Detail\Bernard\Message\Messenger;
 use Detail\Bernard\Receiver\AbstractReceiver;
 use Detail\Mail\Service\MailerInterface as Mailer;
-use Detail\Mail\Driver\Bernard\BernardService;
 
 use Bernard\Message as BernardMessage;
 
@@ -18,20 +18,28 @@ class MailReceiver extends AbstractReceiver
     protected $mailer = null;
 
     /**
-     * @var BernardService
+     * @var Messenger
      */
-    protected $bernardService = null;
+    protected $messenger = null;
 
-    public function __construct(Mailer $mailer, BernardService $bernardService)
+    /**
+     * @param Mailer $mailer
+     * @param Messenger $messenger
+     */
+    public function __construct(Mailer $mailer, Messenger $messenger)
     {
         $this->mailer = $mailer;
-        $this->bernardService = $bernardService;
+        $this->messenger = $messenger;
     }
 
+    /**
+     * @param BernardMessage $message
+     * @throws \Exception
+     */
     public function receive(BernardMessage $message)
     {
         try {
-            $mailMessage = $this->getBernardService()->decodeMessage($message);
+            $mailMessage = $this->getMessenger()->decodeMessage($message);
 
             $this->getMailer()->send($mailMessage);
         } catch (\Exception $e) {
@@ -43,13 +51,19 @@ class MailReceiver extends AbstractReceiver
         }
     }
 
+    /**
+     * @return Mailer
+     */
     protected function getMailer()
     {
         return $this->mailer;
     }
 
-    protected function getBernardService()
+    /**
+     * @return Messenger
+     */
+    protected function getMessenger()
     {
-        return $this->bernardService;
+        return $this->messenger;
     }
 }

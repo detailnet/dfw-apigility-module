@@ -17,10 +17,10 @@ class MailReceiverFactory implements FactoryInterface
         /** @var \Detail\Mail\Service\MailerInterface $mailer */
         $mailer = $serviceLocator->get('direct_mailer'); /** @todo Introduce "receivers" config which references the mailer to use */
 
-        /** @var \Detail\Mail\Driver\Bernard\BernardService $bernardService */
-        $bernardService = $serviceLocator->get('Detail\Mail\Driver\Bernard\BernardService');
+        /** @var \Detail\Mail\Driver\Bernard\BernardDriver $bernardDriver */
+        $bernardDriver = $serviceLocator->get('Detail\Mail\Driver\Bernard\BernardDriver');
 
-        $service = new MailReceiver($mailer, $bernardService);
+        $service = new MailReceiver($mailer, $bernardDriver->getMessenger());
 
         return $service;
     }
