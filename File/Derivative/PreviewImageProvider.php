@@ -132,13 +132,13 @@ class PreviewImageProvider
         }
     }
 
-    public function createDerivative(ItemInterface $file)
+    public function createDerivative(ItemInterface $item)
     {
         $inputFilter = $this->getInputFilter();
 
         $imagine = new Imagine();
         $image = $imagine->open(
-            $file->getFile()->getPathname() . ($inputFilter !== null ? '[' . $inputFilter . ']' : '')
+            $item->getFile()->getPathname() . ($inputFilter !== null ? '[' . $inputFilter . ']' : '')
         );
 
         /** @todo Force/convert sRGB */

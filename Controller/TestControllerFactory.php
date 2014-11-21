@@ -4,13 +4,18 @@ namespace Application\Core\Controller;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class TestControllerFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $controllerManager)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $userService = $controllerManager->getServiceLocator()->get('Application\UserService\UserService');
+        if ($serviceLocator instanceof ServiceLocatorAwareInterface) {
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
+
         /** @var \Application\User\Service\UserService $userService */
+        $userService = $serviceLocator->get('Application\UserService\UserService');
 
         $controller = new TestController($userService);
 

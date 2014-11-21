@@ -10,7 +10,7 @@ class AuthorizationServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $rbacService = $serviceLocator->get('ZfcRbac\Service\AuthorizationService');
-        /** @var \ZfcRbac\Service\AuthorizationService $domainService */
+        /** @var \ZfcRbac\Service\AuthorizationService $rbacService */
 
         $authorizationService = new AuthorizationService($rbacService);
 
