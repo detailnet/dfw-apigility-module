@@ -5,9 +5,9 @@ namespace Application\Core\Domain\Repository;
 interface RepositoryInterface
 {
 //    public function findAll();
-//
-//    public function find($id);
-//
+
+    public function find($id);
+
 //    /**
 //     * Find entities by a set of criteria.
 //     *
