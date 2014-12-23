@@ -58,11 +58,27 @@ abstract class ListCommand implements
     }
 
     /**
+     * @param array $criteria
+     */
+    public function setCriteria(array $criteria)
+    {
+        $this->criteria = $criteria;
+    }
+
+    /**
      * @return array
      */
     public function getOrderBy()
     {
         return $this->orderBy;
+    }
+
+    /**
+     * @param array $orderBy
+     */
+    public function setOrderBy(array $orderBy)
+    {
+        $this->orderBy = $orderBy;
     }
 
     /**
@@ -74,10 +90,26 @@ abstract class ListCommand implements
     }
 
     /**
+     * @param int $limit
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+    }
+
+    /**
      * @return int
      */
     public function getOffset()
     {
         return $this->offset;
+    }
+
+    /**
+     * @param int $offset
+     */
+    public function setOffset($offset)
+    {
+        $this->offset = $offset;
     }
 }
