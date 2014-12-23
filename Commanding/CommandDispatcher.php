@@ -2,6 +2,10 @@
 
 namespace Application\Core\Commanding;
 
+use Application\Core\Commanding\Command\CommandInterface;
+use Application\Core\Commanding\Handler\CommandHandlerInterface;
+use Application\Core\Exception\RuntimeException;
+
 class CommandDispatcher implements
     CommandDispatcherInterface
 {
@@ -27,6 +31,13 @@ class CommandDispatcher implements
     public function handle(CommandInterface $command)
     {
         $commandName = $this->getCommandName($command);
+
+        if (!$this->commandHandlers->has($commandName)) {
+            throw new RuntimeException(
+                sprintf('No handler registered for command "%s"', $commandName)
+            );
+        }
+
         $commandHandler = $this->commandHandlers->get($commandName);
 
         return $commandHandler->handle($command);

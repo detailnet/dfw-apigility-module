@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Core\Commanding;
+namespace Application\Core\Commanding\Handler;
 
+use Application\Core\Commanding\Command\CommandInterface;
 use Application\Core\Exception;
-use Application\Core\Query\Query;
 
 abstract class BaseCommandHandler implements
     CommandHandlerInterface
@@ -23,13 +23,6 @@ abstract class BaseCommandHandler implements
         }
 
         return $this->handleCommand($command);
-    }
-
-    protected function getQuery(array $params)
-    {
-        $query = Query::fromArray($params);
-
-        return $query;
     }
 
     abstract protected function handleCommand(CommandInterface $command);

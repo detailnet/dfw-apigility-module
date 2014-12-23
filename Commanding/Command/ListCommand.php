@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\Core\Query;
+namespace Application\Core\Commanding\Command;
 
-class Query
+abstract class ListCommand implements
+    CommandInterface
 {
     /**
      * @var array
@@ -26,7 +27,7 @@ class Query
 
     public static function fromArray(array $params)
     {
-        return new self(
+        return new static(
             isset($params['criteria']) ? $params['criteria'] : array(),
             isset($params['orderBy']) ? $params['orderBy'] : array(),
             isset($params['limit']) ? $params['limit'] : null,

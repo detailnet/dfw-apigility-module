@@ -4,6 +4,8 @@ namespace Application\Core\Domain\Repository;
 
 interface RepositoryInterface
 {
+    public function create(array $data);
+
     public function find($id);
 
     public function findAll();

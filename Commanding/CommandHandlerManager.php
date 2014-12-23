@@ -4,6 +4,7 @@ namespace Application\Core\Commanding;
 
 use Zend\ServiceManager\AbstractPluginManager;
 
+use Application\Core\Commanding\Handler\CommandHandlerInterface;
 use Application\Core\Exception;
 
 /**
