@@ -33,7 +33,7 @@ interface RepositoryInterface
 //
 //    public function removeAll();
 //
-    public function size();
+    public function size(array $criteria = array());
 //
 //    public function beginTransaction();
 //
