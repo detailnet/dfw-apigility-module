@@ -6,35 +6,19 @@ use ZF\Rest\AbstractResourceListener;
 use ZF\Rest\ResourceEvent;
 
 use Application\Core\Commanding\CommandDispatcherInterface;
+use Application\Core\Commanding\Service\CommandDispatcherAwareInterface;
+use Application\Core\Commanding\Service\CommandDispatcherAwareTrait;
 use Application\Core\Normalizer\NormalizerInterface;
 
-class BaseResourceListener extends AbstractResourceListener
+class BaseResourceListener extends AbstractResourceListener implements
+    CommandDispatcherAwareInterface
 {
-    /**
-     * @var CommandDispatcherInterface
-     */
-    protected $commands;
+    use CommandDispatcherAwareTrait;
 
     /**
      * @var NormalizerInterface
      */
     protected $normalizer;
-
-    /**
-     * @return CommandDispatcherInterface
-     */
-    public function getCommands()
-    {
-        return $this->commands;
-    }
-
-    /**
-     * @param CommandDispatcherInterface $commands
-     */
-    public function setCommands(CommandDispatcherInterface $commands)
-    {
-        $this->commands = $commands;
-    }
 
     /**
      * @return NormalizerInterface
@@ -53,13 +37,16 @@ class BaseResourceListener extends AbstractResourceListener
     }
 
     /**
-     * @param CommandDispatcherInterface $commands
      * @param NormalizerInterface $normalizer
+     * @param CommandDispatcherInterface $commands
      */
-    public function __construct(CommandDispatcherInterface $commands, NormalizerInterface $normalizer)
+    public function __construct(NormalizerInterface $normalizer, CommandDispatcherInterface $commands = null)
     {
         $this->setNormalizer($normalizer);
-        $this->setCommands($commands);
+
+        if ($commands !== null) {
+            $this->setCommands($commands);
+        }
     }
 
     /**
