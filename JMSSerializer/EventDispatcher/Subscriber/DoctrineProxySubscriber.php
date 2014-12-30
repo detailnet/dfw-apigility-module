@@ -13,7 +13,7 @@ class DoctrineProxySubscriber extends JmsDoctrineProxySubscriber
 
         // A HalCollection type mustn't ever be serialized as ArrayCollection for Doctrine's
         // {*}Collection objects (see parent class).
-         if ($type['name'] == 'ZF\Hal\Collection') {
+        if ($type['name'] == 'ZF\Hal\Collection') {
             return;
         }
 

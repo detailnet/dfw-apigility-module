@@ -9,10 +9,21 @@ use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\VisitorInterface;
 
+use Zend\View\Model\ModelInterface as ViewModel;
+
 use ZF\Hal\Collection as HalCollection;
+use ZF\Hal\View\HalJsonModel as HalJsonViewModel;
+
+//use Application\Core\View\JsonModel as JsonViewModel;
+use Zend\View\Model\JsonModel as JsonViewModel;
 
 class HalCollectionHandler implements SubscribingHandlerInterface
 {
+    /**
+     * @var ViewModel
+     */
+    protected $viewModel;
+
     public static function getSubscribingMethods()
     {
         $methods = array();
@@ -39,12 +50,28 @@ class HalCollectionHandler implements SubscribingHandlerInterface
 
     public function serializeCollection(VisitorInterface $visitor, Collection $collection, array $type, Context $context)
     {
-        /** @todo We should be able to disable/ignore this handler on runtime to recursively serialize to array (use metadata?) */
-        return new HalCollection($collection->toArray());
+        $viewModelClass = null;
 
-//        // We change the base type, and pass through possible parameters.
-//        $type['name'] = 'array';
-//
-//        return $visitor->visitArray($collection->toArray(), $type, $context);
+        if ($this->viewModel !== null) {
+            $viewModelClass = get_class($this->viewModel);
+        }
+
+        // Only serialize to HalCollection when:
+        // 1. We're not rendering a view model (viewModel is NULL). So we are respecting the defined type.
+        // 2. We're actually rendering to Hal.
+        // Note that we're using the class name because other view models might inherit from HalJsonModel...
+        if ($viewModelClass === null || $viewModelClass == 'ZF\Hal\View\HalJsonModel') {
+            return new HalCollection($collection->toArray());
+        }
+
+        // We change the base type, and pass through possible parameters.
+        $type['name'] = 'array';
+
+        return $visitor->visitArray($collection->toArray(), $type, $context);
+    }
+
+    public function injectViewModel(ViewModel $viewModel)
+    {
+        $this->viewModel = $viewModel;
     }
 }
