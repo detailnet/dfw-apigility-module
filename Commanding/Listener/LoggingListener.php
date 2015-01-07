@@ -2,22 +2,16 @@
 
 namespace Application\Core\Commanding\Listener;
 
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
 
-use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-
-use Detail\Log\Service\LoggerAwareTrait;
 
 //use Application\Core\Commanding\Command\CommandInterface;
 use Application\Core\Commanding\CommandDispatcherEvent;
+use Application\Core\Log\Listener\BaseLoggingListener;
 
-class LoggingListener extends AbstractListenerAggregate implements
-    LoggerAwareInterface
+class LoggingListener extends BaseLoggingListener
 {
-    use LoggerAwareTrait;
-
     public function __construct()
     {
         $this->setLoggerPrefix('Commanding');
