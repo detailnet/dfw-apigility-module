@@ -10,6 +10,10 @@ class CommandDispatcherEvent extends Event
     const EVENT_PRE_HANDLE = 'handle.pre';
     const EVENT_HANDLE     = 'handle';
 
+    const PARAM_COMMAND_NAME = 'command_name';
+    const PARAM_COMMAND      = 'command';
+    const PARAM_RESULT       = 'result';
+
 //    /**
 //     * @var null|Parameters
 //     */

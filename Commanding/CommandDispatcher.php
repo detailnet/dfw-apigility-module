@@ -112,8 +112,8 @@ class CommandDispatcher implements
         }
 
         $preEventParams = array(
-            'commandName' => $commandName,
-            'command' => $command,
+            CommandDispatcherEvent::PARAM_COMMAND_NAME => $commandName,
+            CommandDispatcherEvent::PARAM_COMMAND => $command,
         );
 
         $events = $this->getEventManager();
@@ -130,7 +130,7 @@ class CommandDispatcher implements
         $postEventParams = array_merge(
             $preEventParams,
             array(
-                'result' => $commandHandlerResult
+                CommandDispatcherEvent::PARAM_RESULT => $commandHandlerResult
             )
         );
 
