@@ -10,7 +10,7 @@ use Application\Core\Exception;
 /**
  * Plugin manager implementation for command handlers.
  *
- * Enforces that adapters retrieved are instances of CommandHandlerInterface
+ * Enforces that handlers retrieved are instances of CommandHandlerInterface.
  */
 class CommandHandlerManager extends AbstractPluginManager
 {
@@ -20,13 +20,6 @@ class CommandHandlerManager extends AbstractPluginManager
      * @var bool
      */
     protected $shareByDefault = false;
-
-    /**
-     * Default set of adapters
-     *
-     * @var array
-     */
-    protected $invokableClasses = array();
 
     /**
      * {@inheritDoc}
