@@ -9,32 +9,15 @@ use Application\Core\Commanding\CommandDispatcherInterface;
 use Application\Core\Commanding\Service\CommandDispatcherAwareInterface;
 use Application\Core\Commanding\Service\CommandDispatcherAwareTrait;
 use Application\Core\Normalizer\NormalizerInterface;
+use Application\Core\Normalizer\Service\NormalizerAwareInterface;
+use Application\Core\Normalizer\Service\NormalizerAwareTrait;
 
 class BaseResourceListener extends AbstractResourceListener implements
-    CommandDispatcherAwareInterface
+    CommandDispatcherAwareInterface,
+    NormalizerAwareInterface
 {
     use CommandDispatcherAwareTrait;
-
-    /**
-     * @var NormalizerInterface
-     */
-    protected $normalizer;
-
-    /**
-     * @return NormalizerInterface
-     */
-    public function getNormalizer()
-    {
-        return $this->normalizer;
-    }
-
-    /**
-     * @param NormalizerInterface $normalizer
-     */
-    public function setNormalizer(NormalizerInterface $normalizer)
-    {
-        $this->normalizer = $normalizer;
-    }
+    use NormalizerAwareTrait;
 
     /**
      * @param NormalizerInterface $normalizer
