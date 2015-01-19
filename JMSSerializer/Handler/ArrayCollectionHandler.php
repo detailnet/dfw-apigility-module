@@ -3,9 +3,9 @@
 namespace Application\Core\JMSSerializer\Handler;
 
 use JMS\Serializer\GraphNavigator;
-use JMS\Serializer\Handler\ArrayCollectionHandler as JMSArrayCollectionHandler;
+use JMS\Serializer\Handler\ArrayCollectionHandler as BaseArrayCollectionHandler;
 
-class ArrayCollectionHandler extends JMSArrayCollectionHandler
+class ArrayCollectionHandler extends BaseArrayCollectionHandler
 {
     public static function getSubscribingMethods()
     {

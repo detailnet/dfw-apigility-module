@@ -60,7 +60,7 @@ class HalCollectionHandler implements SubscribingHandlerInterface
         // 1. We're not rendering a view model (viewModel is NULL). So we are respecting the defined type.
         // 2. We're actually rendering to Hal.
         // Note that we're using the class name because other view models might inherit from HalJsonModel...
-        if ($viewModelClass === null || $viewModelClass == 'ZF\Hal\View\HalJsonModel') {
+        if (/*$viewModelClass === null || */$viewModelClass == 'ZF\Hal\View\HalJsonModel') {
             return new HalCollection($collection->toArray());
         }
 
