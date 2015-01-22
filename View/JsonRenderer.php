@@ -4,10 +4,10 @@ namespace Application\Core\View;
 
 use Countable;
 
+use Detail\Normalization\Normalizer\NormalizerInterface;
+
 use Zend\Paginator\Paginator;
 use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
-
-use Application\Core\Normalizer\NormalizerInterface;
 
 class JsonRenderer extends BaseJsonRenderer
 {

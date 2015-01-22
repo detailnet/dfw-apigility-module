@@ -12,8 +12,8 @@ class JsonRendererFactory implements FactoryInterface
 //        $helpers = $serviceLocator->get('ViewHelperManager');
 
         /** @todo Make normalizer service name configurable */
-        /** @var \Application\Core\Normalizer\JMSSerializerBasedNormalizer $normalizer */
-        $normalizer = $serviceLocator->get('Application\Core\Normalizer\JMSSerializerBasedNormalizer');
+        /** @var \Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer $normalizer */
+        $normalizer = $serviceLocator->get('Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer');
 
         $renderer = new JsonRenderer($normalizer);
 //        $renderer->setHelperPluginManager($helpers);

@@ -5,12 +5,13 @@ namespace Application\Core\Rest\Resource;
 use ZF\Rest\AbstractResourceListener;
 use ZF\Rest\ResourceEvent;
 
+use Detail\Normalization\Normalizer\NormalizerInterface;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
+
 use Application\Core\Commanding\CommandDispatcherInterface;
 use Application\Core\Commanding\Service\CommandDispatcherAwareInterface;
 use Application\Core\Commanding\Service\CommandDispatcherAwareTrait;
-use Application\Core\Normalizer\NormalizerInterface;
-use Application\Core\Normalizer\Service\NormalizerAwareInterface;
-use Application\Core\Normalizer\Service\NormalizerAwareTrait;
 
 class BaseResourceListener extends AbstractResourceListener implements
     CommandDispatcherAwareInterface,
