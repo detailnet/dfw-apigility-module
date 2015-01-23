@@ -1,9 +1,11 @@
 <?php
 
-namespace Application\Core\View;
+namespace Detail\Apigility\Factory\View;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\FactoryInterface;
+
+use Detail\Apigility\View\JsonRenderer;
 
 class JsonRendererFactory implements FactoryInterface
 {
@@ -11,9 +13,11 @@ class JsonRendererFactory implements FactoryInterface
     {
 //        $helpers = $serviceLocator->get('ViewHelperManager');
 
-        /** @todo Make normalizer service name configurable */
-        /** @var \Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer $normalizer */
-        $normalizer = $serviceLocator->get('Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer');
+        /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
+        $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+
+        /** @var \Detail\Normalization\Normalizer\NormalizerInterface $normalizer */
+        $normalizer = $serviceLocator->get($moduleOptions->getNormalizer());
 
         $renderer = new JsonRenderer($normalizer);
 //        $renderer->setHelperPluginManager($helpers);

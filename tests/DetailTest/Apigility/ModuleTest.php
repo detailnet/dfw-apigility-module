@@ -26,7 +26,7 @@ class ModuleTest extends TestCase
 
         $this->assertArrayHasKey('Zend\Loader\StandardAutoloader', $config);
         $this->assertArrayHasKey('namespaces', $config['Zend\Loader\StandardAutoloader']);
-        $this->assertArrayHasKey('Detail\Normalization', $config['Zend\Loader\StandardAutoloader']['namespaces']);
+        $this->assertArrayHasKey('Detail\Apigility', $config['Zend\Loader\StandardAutoloader']['namespaces']);
     }
 
     public function testModuleProvidesConfig()
@@ -34,12 +34,12 @@ class ModuleTest extends TestCase
         $config = $this->module->getConfig();
 
         $this->assertTrue(is_array($config));
-        $this->assertArrayHasKey('detail_normalization', $config);
-        $this->assertTrue(is_array($config['detail_normalization']));
-        $this->assertArrayHasKey('normalizer', $config['detail_normalization']);
+        $this->assertArrayHasKey('detail_apigility', $config);
+        $this->assertTrue(is_array($config['detail_apigility']));
+        $this->assertArrayHasKey('normalizer', $config['detail_apigility']);
         $this->assertEquals(
             'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
-            $config['detail_normalization']['normalizer']
+            $config['detail_apigility']['normalizer']
         );
     }
 

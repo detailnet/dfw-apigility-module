@@ -22,9 +22,13 @@
         "zendframework/zend-loader": "2.*",
         "zendframework/zend-modulemanager": "2.*",
         "zendframework/zend-mvc": "2.*",
+        "zendframework/zend-paginator": "2.*",
         "zendframework/zend-servicemanager": "2.*",
-        "zfcampus/zf-hal": "~1.0.4",
-        "detailnet/dfw-core": "~0.1.1"
+        "zendframework/zend-view": "2.*",
+        "zfcampus/zf-apigility": "~1.0",
+        "detailnet/dfw-core": "~0.1.1",
+        "detailnet/dfw-normalization": "~0.1.1",
+        "detailnet/dfw-commanding": "~0.1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4.2",

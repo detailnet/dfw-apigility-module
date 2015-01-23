@@ -9,6 +9,9 @@ return array(
         'invokables' => array(
         ),
         'factories' => array(
+            'Detail\Apigility\Options\ModuleOptions' => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
+            'Detail\Apigility\View\JsonRenderer'     => 'Detail\Apigility\Factory\View\JsonRendererFactory',
+            'Detail\Apigility\View\JsonStrategy'     => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
         ),
         'initializers' => array(
         ),
@@ -25,5 +28,6 @@ return array(
 //        ),
 //    ),
     'detail_apigility' => array(
+        'normalizer' => 'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
     ),
 );

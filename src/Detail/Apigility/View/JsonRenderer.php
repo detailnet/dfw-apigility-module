@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core\View;
+namespace Detail\Apigility\View;
 
 use Countable;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core\Rest\Resource;
+namespace Detail\Apigility\Rest\Resource;
 
 use ZF\Rest\AbstractResourceListener;
 use ZF\Rest\ResourceEvent;

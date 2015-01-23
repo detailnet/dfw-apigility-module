@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core\View;
+namespace Detail\Apigility\View;
 
 use Zend\View\Strategy\JsonStrategy as BaseJsonStrategy;
 use Zend\View\ViewEvent;

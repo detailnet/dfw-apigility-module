@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core\Exception;
+namespace Detail\Apigility\Exception;
 
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
