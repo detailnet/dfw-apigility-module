@@ -12,9 +12,9 @@ class JsonStrategy extends BaseJsonStrategy
         $this->renderer = $renderer;
     }
 
-    public function selectRenderer(ViewEvent $e)
+    public function selectRenderer(ViewEvent $event)
     {
-        $model = $e->getModel();
+        $model = $event->getModel();
 
         if (!$model instanceof JsonModel) {
             // no JsonModel; do nothing

@@ -20,7 +20,7 @@ class Module implements
     public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
-        $serviceManager = $event->getApplication()->getServiceManager();
+//        $serviceManager = $event->getApplication()->getServiceManager();
 
         // Register our own normalizer based hydrator with Apigility/Hal's plugin manager so that
         // the default hydrator can be found.
