@@ -18,7 +18,7 @@ class JsonStrategy extends BaseJsonStrategy
 
         if (!$model instanceof JsonModel) {
             // no JsonModel; do nothing
-            return;
+            return null;
         }
 
         // JsonModel found

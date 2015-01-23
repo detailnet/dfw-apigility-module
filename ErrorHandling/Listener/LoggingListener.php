@@ -72,5 +72,7 @@ class LoggingListener extends BaseLoggingListener
         ) {
             return $response->getApiProblem()->detail;
         }
+
+        return null;
     }
 }
