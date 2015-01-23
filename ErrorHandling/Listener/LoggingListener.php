@@ -3,6 +3,7 @@
 namespace Application\Core\ErrorHandling\Listener;
 
 use Exception;
+
 use Psr\Log\LogLevel;
 
 use Zend\EventManager\EventManagerInterface;
@@ -10,7 +11,7 @@ use Zend\Mvc\MvcEvent;
 
 use ZF\ApiProblem\ApiProblemResponse;
 
-use Application\Core\Log\Listener\BaseLoggingListener;
+use Detail\Log\Listener\BaseLoggingListener;
 
 class LoggingListener extends BaseLoggingListener
 {
