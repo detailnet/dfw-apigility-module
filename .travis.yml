@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+
+before_script:
+  - composer self-update
+  - composer install --dev --prefer-source --no-interaction
+
+script:
+  - php vendor/bin/phpunit -c travis.phpunit.xml
+  - php vendor/bin/phpmd src xml build/config/phpmd.xml --reportfile build/logs/pmd.xml
+  - php vendor/bin/phpcs --report=checkstyle --report-file=build/logs/checkstyle.xml --standard=build/config/phpcs.xml -v ./src/ ./tests/
+
+after_script:
+  - php vendor/bin/coveralls

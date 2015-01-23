@@ -1,0 +1,61 @@
+{
+    "name": "detailnet/dfw-apigility-module",
+    "description": "Zend Framework 2 Module containing tools for ZF Apigility",
+    "type": "library",
+    "keywords": [
+        "dfw",
+        "detailnet",
+        "apigility",
+        "module",
+        "zf2"
+    ],
+    "homepage": "https://github.com/detailnet/dfw-normalization-module/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Wolf",
+            "email": "ivan.wolf@detailnet.ch"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "zendframework/zend-loader": "2.*",
+        "zendframework/zend-modulemanager": "2.*",
+        "zendframework/zend-mvc": "2.*",
+        "zendframework/zend-servicemanager": "2.*",
+        "zfcampus/zf-hal": "~1.0.4",
+        "detailnet/dfw-core": "~0.1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.4.2",
+        "squizlabs/php_codesniffer" : "~2.2.0",
+        "phpmd/phpmd": "~2.1.3",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Detail\\Apigility\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "DetailTest\\Apigility\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "!vendor",
+            "tests",
+            "*phpunit.xml",
+            ".travis.yml",
+            "build.xml",
+            "build.properties",
+            "composer.phar"
+        ]
+    }
+}

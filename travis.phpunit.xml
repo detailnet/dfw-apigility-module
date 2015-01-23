@@ -1,0 +1,27 @@
+<phpunit
+    bootstrap="./tests/bootstrap.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    verbose="true"
+    stopOnFailure="false"
+    processIsolation="false"
+    backupGlobals="false"
+    syntaxCheck="true"
+>
+    <testsuite name="Detail\Apigility Test Suite">
+        <directory>./tests/DetailTest/Apigility</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-clover" target="./build/logs/clover.xml"/>
+        <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+</phpunit>
