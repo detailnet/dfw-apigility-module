@@ -2,6 +2,9 @@
 
 namespace Detail\Apigility\Rest\Resource;
 
+use Zend\Stdlib\Parameters;
+
+use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\AbstractResourceListener;
 use ZF\Rest\ResourceEvent;
 
@@ -91,6 +94,18 @@ class BaseResourceListener extends AbstractResourceListener implements
 
         $this->event = $event;
 
+        switch ($event->getName()) {
+            case 'fetchAll':
+                // Always transform paging related params
+                $event->setQueryParams(
+                    new Parameters($this->getQueryParams($event, true))
+                );
+                break;
+            default:
+                // Do nothing
+                break;
+        }
+
         $commandMapping = $this->getRequestCommandMapping($event->getName());
 
         if ($commandMapping !== null) {
@@ -110,30 +125,36 @@ class BaseResourceListener extends AbstractResourceListener implements
             }
 
             $commandClass = $commandMapping['command_class'];
-            $paramSource = isset($commandMapping['param_source']) ? $commandMapping['param_source'] : 'body';
+            $data = array();
 
-            switch ($paramSource) {
-                case 'query':
-                    $data = $this->getQueryParams($event, $event->getName() === 'fetchAll');
-                    break;
-                case 'body':
-                default:
+            switch ($event->getName()) {
+                case 'create':
+                case 'deleteList':
+                case 'patch':
+                case 'patchList':
+                case 'replaceList':
+                case 'update':
                     $data = $this->getBodyParams($event);
+                    break;
+                case 'fetchAll':
+                    /// Note that the paging related params are already transformed...
+                    $data = $this->getQueryParams($event, false);
+                    break;
+                default:
+                    // Do nothing
                     break;
             }
 
             /** @todo The normalizer should know from which version to denormalize from */
             $this->command = $normalizer->denormalize($data, $commandClass);
+        }
 
-            switch ($paramSource) {
-                case 'query':
-                    $event->getQueryParams()->set('command', $this->command);
-                    break;
-                case 'body':
-                default:
-                    $event->setParam('data', $this->command);
-                    break;
-            }
+        /** @todo Use eventing... */
+        $result = $this->onBeforeDispatch($event, $this->command);
+
+        // No need to continue if we already encountered a problem...
+        if ($result instanceof ApiProblem) {
+            return $result;
         }
 
         return parent::dispatch($event);
@@ -141,9 +162,18 @@ class BaseResourceListener extends AbstractResourceListener implements
 
     /**
      * @param ResourceEvent $event
+     * @param CommandInterface $command
+     * @return mixed
+     */
+    protected function onBeforeDispatch(ResourceEvent $event, CommandInterface $command)
+    {
+    }
+
+    /**
+     * @param ResourceEvent $event
      * @return array
      */
-    private function getBodyParams(ResourceEvent $event)
+    protected function getBodyParams(ResourceEvent $event)
     {
         $params = (array) $event->getParam('data', array());
 
@@ -155,7 +185,7 @@ class BaseResourceListener extends AbstractResourceListener implements
      * @param bool $translatePaging
      * @return array
      */
-    private function getQueryParams(ResourceEvent $event, $translatePaging = false)
+    protected function getQueryParams(ResourceEvent $event, $translatePaging = false)
     {
         $params = (array) ($event->getQueryParams() ?: array());
 
@@ -175,10 +205,16 @@ class BaseResourceListener extends AbstractResourceListener implements
             unset($params['page'], $params['page_size']);
         }
 
-        $params = array_merge(
-            $event->getRouteMatch()->getParams(),
-            $params
-        );
+        return $params;
+    }
+
+    /**
+     * @param ResourceEvent $event
+     * @return array
+     */
+    protected function getRouteParams(ResourceEvent $event)
+    {
+        $params = $event->getRouteMatch()->getParams();
 
         unset($params['controller']);
 
