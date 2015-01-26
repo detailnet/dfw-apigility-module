@@ -5,6 +5,7 @@ namespace Detail\Apigility\Rest\Resource;
 use ZF\Rest\AbstractResourceListener;
 use ZF\Rest\ResourceEvent;
 
+use Detail\Commanding\Command\CommandInterface;
 use Detail\Commanding\CommandDispatcherInterface;
 use Detail\Commanding\Service\CommandDispatcherAwareInterface;
 use Detail\Commanding\Service\CommandDispatcherAwareTrait;
@@ -22,6 +23,11 @@ class BaseResourceListener extends AbstractResourceListener implements
     use NormalizerAwareTrait;
 
     protected $requestCommandMap = array();
+
+    /**
+     * @var CommandInterface
+     */
+    protected $command;
 
     /**
      * @param NormalizerInterface $normalizer
@@ -64,6 +70,19 @@ class BaseResourceListener extends AbstractResourceListener implements
     }
 
     /**
+     * @param boolean $failOnNull
+     * @return CommandInterface
+     */
+    public function getDispatchedCommand($failOnNull = true)
+    {
+        if ($this->command === null && $failOnNull !== false) {
+            throw new Exception\RuntimeException('No command was created during dispatch');
+        }
+
+        return $this->command;
+    }
+
+    /**
      * @inheritdoc
      */
     public function dispatch(ResourceEvent $event)
@@ -103,34 +122,16 @@ class BaseResourceListener extends AbstractResourceListener implements
                     break;
             }
 
-//            switch ($event->getName()) {
-//                case 'create':
-//                case 'deleteList':
-//                case 'patch':
-//                case 'patchList':
-//                case 'replaceList':
-//                case 'update':
-//                    $data = (array) $event->getParam('data', array());
-//                    break;
-//                default:
-//                    throw new Exception\RuntimeException(
-//                        sprintf(
-//                            'Request to command mapping does not support the event "%s"',
-//                            $event->getName()
-//                        )
-//                    );
-//            }
-
             /** @todo The normalizer should know from which version to denormalize from */
-            $command = $normalizer->denormalize($data, $commandClass);
+            $this->command = $normalizer->denormalize($data, $commandClass);
 
             switch ($paramSource) {
                 case 'query':
-                    $event->setQueryParams($command);
+                    $event->getQueryParams()->set('command', $this->command);
                     break;
                 case 'body':
                 default:
-                    $event->setParam('data', $command);
+                    $event->setParam('data', $this->command);
                     break;
             }
         }
