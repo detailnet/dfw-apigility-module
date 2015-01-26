@@ -6,7 +6,8 @@ use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 
-abstract class BaseLinkInjectorListener implements ListenerAggregateInterface
+abstract class BaseLinkInjectorListener implements
+    ListenerAggregateInterface
 {
     /**
      * @var array
