@@ -90,8 +90,6 @@ class BaseResourceListener extends AbstractResourceListener implements
      */
     public function dispatch(ResourceEvent $event)
     {
-        $normalizer = $this->getNormalizer();
-
         $this->event = $event;
 
         switch ($event->getName()) {
@@ -109,44 +107,7 @@ class BaseResourceListener extends AbstractResourceListener implements
         $commandMapping = $this->getRequestCommandMapping($event->getName());
 
         if ($commandMapping !== null) {
-            if ($normalizer === null) {
-                throw new Exception\ConfigException(
-                    'Cannot use request to command mapping; no Normalizer provided'
-                );
-            }
-
-            if (!isset($commandMapping['command_class'])) {
-                throw new Exception\ConfigException(
-                    sprintf(
-                        'Invalid request to command mapping configuration for event "%s"',
-                        $event->getName()
-                    )
-                );
-            }
-
-            $commandClass = $commandMapping['command_class'];
-            $data = array();
-
-            switch ($event->getName()) {
-                case 'create':
-                case 'deleteList':
-                case 'patch':
-                case 'patchList':
-                case 'replaceList':
-                case 'update':
-                    $data = $this->getBodyParams($event);
-                    break;
-                case 'fetchAll':
-                    /// Note that the paging related params are already transformed...
-                    $data = $this->getQueryParams($event, false);
-                    break;
-                default:
-                    // Do nothing
-                    break;
-            }
-
-            /** @todo The normalizer should know from which version to denormalize from */
-            $this->command = $normalizer->denormalize($data, $commandClass);
+            $this->command = $this->createCommand($event);
         }
 
         /** @todo Use eventing... */
@@ -165,7 +126,7 @@ class BaseResourceListener extends AbstractResourceListener implements
      * @param CommandInterface $command
      * @return mixed
      */
-    protected function onBeforeDispatch(ResourceEvent $event, CommandInterface $command)
+    protected function onBeforeDispatch(ResourceEvent $event, CommandInterface $command = null)
     {
     }
 
@@ -219,5 +180,49 @@ class BaseResourceListener extends AbstractResourceListener implements
         unset($params['controller']);
 
         return $params;
+    }
+
+    protected function createCommand(ResourceEvent $event)
+    {
+        $normalizer = $this->getNormalizer();
+
+        if ($normalizer === null) {
+            throw new Exception\ConfigException(
+                'Cannot use request to command mapping; no Normalizer provided'
+            );
+        }
+
+        if (!isset($commandMapping['command_class'])) {
+            throw new Exception\ConfigException(
+                sprintf(
+                    'Invalid request to command mapping configuration for event "%s"',
+                    $event->getName()
+                )
+            );
+        }
+
+        $commandClass = $commandMapping['command_class'];
+        $data = array();
+
+        switch ($event->getName()) {
+            case 'create':
+            case 'deleteList':
+            case 'patch':
+            case 'patchList':
+            case 'replaceList':
+            case 'update':
+                $data = $this->getBodyParams($event);
+                break;
+            case 'fetchAll':
+                /// Note that the paging related params are already transformed...
+                $data = $this->getQueryParams($event, false);
+                break;
+            default:
+                // Do nothing
+                break;
+        }
+
+        /** @todo The normalizer should know from which version to denormalize from */
+        return $normalizer->denormalize($data, $commandClass);
     }
 }
