@@ -14,6 +14,7 @@ return array(
             'Detail\Apigility\View\JsonStrategy'     => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
         ),
         'initializers' => array(
+            'Detail\Apigility\Rest\Resource\ResourceInitializer',
         ),
         'shared' => array(
         ),
@@ -29,5 +30,6 @@ return array(
 //    ),
     'detail_apigility' => array(
         'normalizer' => 'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
+        'request_command_map' => array(),
     ),
 );

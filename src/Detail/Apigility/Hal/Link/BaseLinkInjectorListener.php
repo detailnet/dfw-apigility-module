@@ -74,9 +74,7 @@ abstract class BaseLinkInjectorListener implements
      *
      * @param EventInterface $event
      */
-    public function onRenderCollection(EventInterface $event)
-    {
-    }
+    abstract public function onRenderCollection(EventInterface $event);
 
     /**
      * Listener for the "renderCollection.entity" event
@@ -84,35 +82,30 @@ abstract class BaseLinkInjectorListener implements
      * @param EventInterface $event
      * @return void
      */
-    public function onRenderCollectionEntity(EventInterface $event)
-    {
-    }
+    abstract public function onRenderCollectionEntity(EventInterface $event);
 
     /**
      * Listener for the "renderEntity" event
      *
      * @param EventInterface $event
      */
-    public function onRenderEntity(EventInterface $event)
-    {
-    }
+    abstract public function onRenderEntity(EventInterface $event);
 
     /**
      * Determine if an entity is of interest (e.g., needs links or url parameter injection).
      *
      * The goal of this method is to test an entity to see if it is of a given
      * type and if the current entity version is equal to or greater than a
-     * given mimimum version.
+     * given minimum version.
      *
      * The method accepts the entity, the "type" to check against (essentially
      * the service name), and the minimum version we're interested in.
      *
      * @param mixed $object
      * @param string $type
-     * @param int $minVersion
      * @return bool
      */
-    protected function isObjectOfInterest($object, $type, $minVersion = null)
+    protected function isObjectOfInterest($object, $type/*, $minVersion = null*/)
     {
         if (!is_object($object)) {
             return false;
@@ -120,7 +113,8 @@ abstract class BaseLinkInjectorListener implements
 
         $regex = sprintf($this->entityRegexTemplate, $type);
 
-        if (!preg_match($regex, get_class($object), $matches)) {
+//        if (!preg_match($regex, get_class($object), $matches)) {
+        if (!preg_match($regex, get_class($object))) {
             return false;
         }
 
