@@ -47,6 +47,17 @@ class BaseResourceListener extends AbstractResourceListener implements
 
     /**
      * @param string $eventName
+     * @return bool
+     */
+    public function hasRequestCommandMapping($eventName)
+    {
+        $map = $this->getRequestCommandMap();
+
+        return isset($map[$eventName]);
+    }
+
+    /**
+     * @param string $eventName
      * @return array|string
      */
     public function getRequestCommandMapping($eventName)
@@ -104,9 +115,7 @@ class BaseResourceListener extends AbstractResourceListener implements
                 break;
         }
 
-        $commandMapping = $this->getRequestCommandMapping($event->getName());
-
-        if ($commandMapping !== null) {
+        if ($this->hasRequestCommandMapping($event->getName())) {
             $this->command = $this->createCommand($event);
         }
 
@@ -182,6 +191,10 @@ class BaseResourceListener extends AbstractResourceListener implements
         return $params;
     }
 
+    /**
+     * @param ResourceEvent $event
+     * @return CommandInterface
+     */
     protected function createCommand(ResourceEvent $event)
     {
         $normalizer = $this->getNormalizer();
@@ -191,6 +204,8 @@ class BaseResourceListener extends AbstractResourceListener implements
                 'Cannot use request to command mapping; no Normalizer provided'
             );
         }
+
+        $commandMapping = $this->getRequestCommandMapping($event->getName());
 
         if (!isset($commandMapping['command_class'])) {
             throw new Exception\ConfigException(
