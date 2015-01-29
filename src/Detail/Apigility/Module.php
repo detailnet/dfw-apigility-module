@@ -22,6 +22,8 @@ class Module implements
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
         $serviceManager = $event->getApplication()->getServiceManager();
 
+        $config = $serviceManager->get('Config');
+
         // Register our own normalizer based hydrator with Apigility/Hal's plugin manager so that
         // the default hydrator can be found.
         if ($serviceManager->has('ZF\Hal\MetadataMap')
