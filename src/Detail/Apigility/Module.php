@@ -20,23 +20,26 @@ class Module implements
     public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
-//        $serviceManager = $event->getApplication()->getServiceManager();
+        $serviceManager = $event->getApplication()->getServiceManager();
 
         // Register our own normalizer based hydrator with Apigility/Hal's plugin manager so that
         // the default hydrator can be found.
-        /** @todo Move NormalizerBasedHydrator to this library (Detail\Apigility\Hydrator\NormalizerBasedHydrator) */
-//        if ($serviceManager->has('ZF\Hal\MetadataMap')) {
-//            $hydratorClass = __NAMESPACE__ . '\ZendHydrator\NormalizerBasedHydrator';
-//
-//            /** @var \ZF\Hal\Metadata\MetadataMap $metadataMap */
-//            $metadataMap = $serviceManager->get('ZF\Hal\MetadataMap');
-//            $metadataMap->getHydratorManager()->setFactory(
-//                $hydratorClass,
-//                function() use ($serviceManager, $hydratorClass) {
-//                    return $serviceManager->get($hydratorClass);
-//                }
-//            );
-//        }
+        if ($serviceManager->has('ZF\Hal\MetadataMap')
+            && isset($config['zf-hal'])
+            && isset($config['zf-hal']['renderer'])
+            && isset($config['zf-hal']['renderer']['default_hydrator'])
+        ) {
+            $hydratorClass = $config['zf-hal']['renderer']['default_hydrator'];
+
+            /** @var \ZF\Hal\Metadata\MetadataMap $metadataMap */
+            $metadataMap = $serviceManager->get('ZF\Hal\MetadataMap');
+            $metadataMap->getHydratorManager()->setFactory(
+                $hydratorClass,
+                function() use ($serviceManager, $hydratorClass) {
+                    return $serviceManager->get($hydratorClass);
+                }
+            );
+        }
 
         $eventManager = $event->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'onRender'), 100);
@@ -55,10 +58,10 @@ class Module implements
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
         $serviceManager = $event->getApplication()->getServiceManager();
 
-        $halCollectionHandlerClass = 'Detail\Normalization\JMSSerializer\Handler\HalCollectionHandler';
+        $halCollectionHandlerClass = __NAMESPACE__ . '\JMSSerializer\Handler\HalCollectionHandler';
 
         if ($serviceManager->has($halCollectionHandlerClass)) {
-            /** @var \Detail\Normalization\JMSSerializer\Handler\HalCollectionHandler $halCollectionHandler */
+            /** @var \Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler $halCollectionHandler */
             $halCollectionHandler = $serviceManager->get($halCollectionHandlerClass);
 
             /** @var ViewModel|array|null|false $viewModel */

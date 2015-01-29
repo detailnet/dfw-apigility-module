@@ -2,5 +2,6 @@
 
 return array(
     'detail_apigility' => array(
+        'request_command_map' => array(),
     ),
 );
