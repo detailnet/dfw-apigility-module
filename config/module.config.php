@@ -28,7 +28,7 @@ return array(
     'jms_serializer' => array(
         'handlers' => array(
             'subscribers' => array(
-                'Detail\Normalization\JMSSerializer\Handler\HalCollectionHandler',
+                'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler',
             ),
         ),
     ),
