@@ -105,9 +105,9 @@ class BaseResourceListener extends AbstractResourceListener implements
 
         switch ($event->getName()) {
             case 'fetchAll':
-                // Always transform paging related params
+                // Always transform paging related params and decode JSON encoded params
                 $event->setQueryParams(
-                    new Parameters($this->getQueryParams($event, true))
+                    new Parameters($this->getQueryParams($event, true, true))
                 );
                 break;
             default:
@@ -153,10 +153,14 @@ class BaseResourceListener extends AbstractResourceListener implements
     /**
      * @param ResourceEvent $event
      * @param bool $translatePaging
+     * @param bool $translateDecoded
      * @return array
      */
-    protected function getQueryParams(ResourceEvent $event, $translatePaging = false)
-    {
+    protected function getQueryParams(
+        ResourceEvent $event,
+        $translatePaging = false,
+        $translateDecoded = false
+    ) {
         $params = (array) ($event->getQueryParams() ?: array());
 
         if ($translatePaging === true) {
@@ -173,6 +177,19 @@ class BaseResourceListener extends AbstractResourceListener implements
             $params['offset'] = ($params['page'] - 1) * $params['page_size'];
 
             unset($params['page'], $params['page_size']);
+        }
+
+        if ($translateDecoded === true) {
+            foreach ($params as $key => $value) {
+                // Try to detect JSON...
+                if (is_string($value) && in_array($value[0], array('[', '{'))) {
+                    try {
+                        $params[$key] = $this->decodeJson($value);
+                    } catch (Exception\RuntimeException $e) {
+                        // Do nothing (assume it wasn't JSON)
+                    }
+                }
+            }
         }
 
         return $params;
@@ -229,8 +246,8 @@ class BaseResourceListener extends AbstractResourceListener implements
                 $data = $this->getBodyParams($event);
                 break;
             case 'fetchAll':
-                /// Note that the paging related params are already transformed...
-                $data = $this->getQueryParams($event, false);
+                /// Note that the paging related params are already transformed and JSON params are decoded...
+                $data = $this->getQueryParams($event, false, false);
                 break;
             default:
                 // Do nothing
@@ -239,5 +256,44 @@ class BaseResourceListener extends AbstractResourceListener implements
 
         /** @todo The normalizer should know from which version to denormalize from */
         return $normalizer->denormalize($data, $commandClass);
+    }
+
+    /**
+     * @param string $value
+     * @return array
+     */
+    protected function decodeJson($value)
+    {
+        $data = json_decode($value, true);
+        $error = json_last_error();
+
+        if ($error !== JSON_ERROR_NONE) {
+            switch (json_last_error()) {
+                case JSON_ERROR_DEPTH:
+                    $message = 'Maximum stack depth exceeded';
+                    break;
+                case JSON_ERROR_STATE_MISMATCH:
+                    $message = 'Underflow or the modes mismatch';
+                    break;
+                case JSON_ERROR_CTRL_CHAR:
+                    $message = 'Unexpected control character found';
+                    break;
+                case JSON_ERROR_SYNTAX:
+                    $message = 'Syntax error, malformed JSON';
+                    break;
+                case JSON_ERROR_UTF8:
+                    $message = 'Malformed UTF-8 characters, possibly incorrectly encoded';
+                    break;
+                default:
+                    $message = 'Unknown error';
+                    break;
+            }
+
+            throw new Exception\RuntimeException(
+                'Failed to decode JSON parameter; ' . $message
+            );
+        }
+
+        return $data;
     }
 }
