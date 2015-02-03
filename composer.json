@@ -27,11 +27,11 @@
         "zendframework/zend-stdlib": "2.*",
         "zendframework/zend-view": "2.*",
         "zfcampus/zf-apigility": "~1.0",
-        "jms/serializer": "~0.16.0",
+        "jms/serializer": "~0.16.0",i
         "doctrine/collections": "1.2.*@dev",
         "detailnet/dfw-core": "~0.1.1",
         "detailnet/dfw-normalization": "~0.1.3",
-        "detailnet/dfw-commanding": "~0.1.3"
+        "detailnet/dfw-commanding": "dev-tweak/listing"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4.5",
