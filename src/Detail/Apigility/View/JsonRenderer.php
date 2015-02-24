@@ -10,19 +10,18 @@ use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
 use ZF\Hal\Collection as HalCollection;
 
 use Detail\Normalization\Normalizer\NormalizerInterface;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareTrait;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 
-class JsonRenderer extends BaseJsonRenderer
+class JsonRenderer extends BaseJsonRenderer implements
+    NormalizerAwareInterface,
+    NormalizationGroupsProviderAwareInterface
 {
-    /**
-     * @var NormalizerInterface
-     */
-    protected $normalizer;
-
-    /**
-     * @var NormalizationGroupsProviderInterface
-     */
-    protected $normalizationGroupsProvider;
+    use NormalizerAwareTrait;
+    use NormalizationGroupsProviderAwareTrait;
 
     /**
      * @param NormalizerInterface $normalizer
@@ -37,39 +36,6 @@ class JsonRenderer extends BaseJsonRenderer
         if ($normalizationGroupsProvider !== null) {
             $this->setNormalizationGroupsProvider($normalizationGroupsProvider);
         }
-    }
-
-    /**
-     * @return NormalizerInterface
-     */
-    public function getNormalizer()
-    {
-        return $this->normalizer;
-    }
-
-    /**
-     * @param NormalizerInterface $normalizer
-     */
-    public function setNormalizer(NormalizerInterface $normalizer)
-    {
-        $this->normalizer = $normalizer;
-    }
-
-    /**
-     * @return NormalizationGroupsProviderInterface
-     */
-    public function getNormalizationGroupsProvider()
-    {
-        return $this->normalizationGroupsProvider;
-    }
-
-    /**
-     * @param NormalizationGroupsProviderInterface $normalizationGroupsProvider
-     */
-    public function setNormalizationGroupsProvider(
-        NormalizationGroupsProviderInterface $normalizationGroupsProvider
-    ) {
-        $this->normalizationGroupsProvider = $normalizationGroupsProvider;
     }
 
     public function render($nameOrModel, $values = null)
@@ -147,14 +113,14 @@ class JsonRenderer extends BaseJsonRenderer
 
     /**
      * @param mixed $object
-     * @return array
+     * @return array|null
      */
     protected function getNormalizationGroups($object)
     {
         $groupsProvider = $this->getNormalizationGroupsProvider();
 
         if ($groupsProvider === null) {
-            return array();
+            return null;
         }
 
         return $groupsProvider->getGroups($object);
