@@ -64,12 +64,15 @@ class JsonRenderer extends BaseJsonRenderer
         $attributes = $halCollection->getAttributes();
 
         if ($collection instanceof Paginator) {
+            $pageSize = (int) (isset($attributes['page_size']) ? $attributes['page_size'] : $halCollection->getPageSize());
+
+            $collection->setItemCountPerPage($pageSize);
             $items = (array) $collection->getCurrentItems();
 
             $payload = array(
                 $collectionName => $this->getNormalizer()->normalize($items),
                 'page_count' => (int) (isset($attributes['page_count']) ? $attributes['page_count'] : $collection->count()),
-                'page_size' => (int) (isset($attributes['page_size']) ? $attributes['page_size'] : $halCollection->getPageSize()),
+                'page_size' => $pageSize,
                 'total_items' => (int) (isset($attributes['total_items']) ? $attributes['total_items'] : $collection->getTotalItemCount()),
             );
         } else {
