@@ -8,22 +8,68 @@ use Zend\Paginator\Paginator;
 use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
 
 use ZF\Hal\Collection as HalCollection;
-use ZF\Hal\Entity as HalEntity;
 
 use Detail\Normalization\Normalizer\NormalizerInterface;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 
 class JsonRenderer extends BaseJsonRenderer
 {
+    /**
+     * @var NormalizerInterface
+     */
     protected $normalizer;
 
-    public function __construct(NormalizerInterface $normalizer)
+    /**
+     * @var NormalizationGroupsProviderInterface
+     */
+    protected $normalizationGroupsProvider;
+
+    /**
+     * @param NormalizerInterface $normalizer
+     * @param NormalizationGroupsProviderInterface $normalizationGroupsProvider
+     */
+    public function __construct(
+        NormalizerInterface $normalizer,
+        NormalizationGroupsProviderInterface $normalizationGroupsProvider = null
+    ) {
+        $this->setNormalizer($normalizer);
+
+        if ($normalizationGroupsProvider !== null) {
+            $this->setNormalizationGroupsProvider($normalizationGroupsProvider);
+        }
+    }
+
+    /**
+     * @return NormalizerInterface
+     */
+    public function getNormalizer()
+    {
+        return $this->normalizer;
+    }
+
+    /**
+     * @param NormalizerInterface $normalizer
+     */
+    public function setNormalizer(NormalizerInterface $normalizer)
     {
         $this->normalizer = $normalizer;
     }
 
-    public function getNormalizer()
+    /**
+     * @return NormalizationGroupsProviderInterface
+     */
+    public function getNormalizationGroupsProvider()
     {
-        return $this->normalizer;
+        return $this->normalizationGroupsProvider;
+    }
+
+    /**
+     * @param NormalizationGroupsProviderInterface $normalizationGroupsProvider
+     */
+    public function setNormalizationGroupsProvider(
+        NormalizationGroupsProviderInterface $normalizationGroupsProvider
+    ) {
+        $this->normalizationGroupsProvider = $normalizationGroupsProvider;
     }
 
     public function render($nameOrModel, $values = null)
@@ -102,23 +148,15 @@ class JsonRenderer extends BaseJsonRenderer
     /**
      * @param mixed $object
      * @return array
-     * @todo Support groups for HAL results
      */
     protected function getNormalizationGroups($object)
     {
-        // The default group is always required so that properties without a group don't get excluded
-        $groups = array('Default');
+        $groupsProvider = $this->getNormalizationGroupsProvider();
 
-        if ($object instanceof HalCollection) {
-            $groups[] = $object->getCollectionName();
-        } elseif ($object instanceof HalEntity) {
-            $entity = $object->entity;
-            $entityName = (new \ReflectionClass($entity))->getShortName();
-
-            // Snake case
-            $groups[] = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $entityName))));
+        if ($groupsProvider === null) {
+            return array();
         }
 
-        return $groups;
+        return $groupsProvider->getGroups($object);
     }
 }

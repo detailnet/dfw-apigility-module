@@ -15,11 +15,15 @@ class JsonRendererFactory implements FactoryInterface
 
         /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
         $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+        $normalizationOptions = $moduleOptions->getNormalization();
 
         /** @var \Detail\Normalization\Normalizer\NormalizerInterface $normalizer */
-        $normalizer = $serviceLocator->get($moduleOptions->getNormalizer());
+        $normalizer = $serviceLocator->get($normalizationOptions->getNormalizer());
 
-        $renderer = new JsonRenderer($normalizer);
+        /** @var \Detail\Apigility\Normalization\NormalizationGroupsProviderInterface $normalizationGroupsProvider */
+        $normalizationGroupsProvider = $serviceLocator->get($normalizationOptions->getGroupsProvider());
+
+        $renderer = new JsonRenderer($normalizer, $normalizationGroupsProvider);
 //        $renderer->setHelperPluginManager($helpers);
 
         return $renderer;

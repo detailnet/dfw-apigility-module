@@ -7,7 +7,9 @@ return array(
         'aliases' => array(
         ),
         'invokables' => array(
+            'Detail\Apigility\Hal\HydrationListener'                      => 'Detail\Apigility\Hal\HydrationListener',
             'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler' => 'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler',
+            'Detail\Apigility\Normalization\NormalizationGroupsProvider'  => 'Detail\Apigility\Normalization\NormalizationGroupsProvider',
         ),
         'factories' => array(
             'Detail\Apigility\Hydrator\NormalizerBasedHydrator' => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydratorFactory',
@@ -38,7 +40,15 @@ return array(
         ),
     ),
     'detail_apigility' => array(
-        'normalizer' => 'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
+        'normalization' => array(
+            'normalizer' => 'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
+            'groups_provider' => 'Detail\Apigility\Normalization\NormalizationGroupsProvider',
+        ),
+        'hal' => array(
+            'listeners' => array(
+                'Detail\Apigility\Hal\HydrationListener',
+            ),
+        ),
         'request_command_map' => array(),
     ),
 );

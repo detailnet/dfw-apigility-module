@@ -7,9 +7,14 @@ use Detail\Core\Options\AbstractOptions;
 class ModuleOptions extends AbstractOptions
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $normalizer;
+    protected $normalization;
+
+    /**
+     * @var Hal\HalOptions
+     */
+    protected $hal;
 
     /**
      * @var array
@@ -17,19 +22,35 @@ class ModuleOptions extends AbstractOptions
     protected $requestCommandMap = array();
 
     /**
-     * @return string
+     * @return Normalization\NormalizationOptions
      */
-    public function getNormalizer()
+    public function getNormalization()
     {
-        return $this->normalizer;
+        return $this->normalization;
     }
 
     /**
-     * @param string $normalizer
+     * @param array $normalization
      */
-    public function setNormalizer($normalizer)
+    public function setNormalization(array $normalization)
     {
-        $this->normalizer = $normalizer;
+        $this->normalization = new Normalization\NormalizationOptions($normalization);
+    }
+
+    /**
+     * @return Hal\HalOptions
+     */
+    public function getHal()
+    {
+        return $this->hal;
+    }
+
+    /**
+     * @param array $hal
+     */
+    public function setHal(array $hal)
+    {
+        $this->hal = new Hal\HalOptions($hal);
     }
 
     /**

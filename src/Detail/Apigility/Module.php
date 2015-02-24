@@ -2,6 +2,7 @@
 
 namespace Detail\Apigility;
 
+use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Loader\StandardAutoloader;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
@@ -22,6 +23,9 @@ class Module implements
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
         $serviceManager = $event->getApplication()->getServiceManager();
 
+        /** @var Options\ModuleOptions $moduleOptions */
+        $moduleOptions = $serviceManager->get(__NAMESPACE__ . '\Options\ModuleOptions');
+
         $config = $serviceManager->get('Config');
 
         // Register our own normalizer based hydrator with Apigility/Hal's plugin manager so that
@@ -41,6 +45,22 @@ class Module implements
                     return $serviceManager->get($hydratorClass);
                 }
             );
+        }
+
+        $viewHelperManager = $serviceManager->get('ViewHelperManager');
+
+        if ($viewHelperManager->has('Hal')) {
+            /** @var \ZF\Hal\Plugin\Hal $hal */
+            $hal = $viewHelperManager->get('Hal');
+
+            foreach ($moduleOptions->getHal()->getListeners() as $listenerClass) {
+                /** @var ListenerAggregateInterface $listener */
+                $listener = $serviceManager->get($listenerClass);
+
+                // The HAL plugin's EventManager instance does not compose a SharedEventManager,
+                // so we attach directly to it.
+                $hal->getEventManager()->attachAggregate($listener);
+            }
         }
 
         $eventManager = $event->getApplication()->getEventManager();
@@ -92,7 +112,7 @@ class Module implements
 
         // Register at high priority, to "beat" normal HalJson and Json strategies registered
         // via view manager
-        $eventManager->attach($serviceManager->get('Detail\Apigility\View\JsonStrategy'), 300);
+        $eventManager->attach($serviceManager->get(__NAMESPACE__ . '\View\JsonStrategy'), 300);
     }
 
     /**
