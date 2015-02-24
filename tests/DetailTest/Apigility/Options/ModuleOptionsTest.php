@@ -14,20 +14,20 @@ class ModuleOptionsTest extends OptionsTestCase
         $this->options = $this->getOptions(
             'Detail\Apigility\Options\ModuleOptions',
             array(
-                'getNormalizer',
-                'setNormalizer',
+                'getNormalization',
+                'setNormalization',
             )
         );
     }
 
-    public function testNormalizerCanBeSet()
+    public function testNormalizationCanBeSet()
     {
-        $normalizer = 'Some\Normalizer\Class';
+        $this->assertNull($this->options->getNormalization());
 
-        $this->assertNull($this->options->getNormalizer());
+        $this->options->setNormalization(array());
 
-        $this->options->setNormalizer($normalizer);
+        $normalization = $this->options->getNormalization();
 
-        $this->assertEquals($normalizer, $this->options->getNormalizer());
+        $this->assertInstanceOf('Detail\Apigility\Options\Normalization\NormalizationOptions', $normalization);
     }
 }

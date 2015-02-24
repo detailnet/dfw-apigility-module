@@ -36,10 +36,12 @@ class ModuleTest extends TestCase
         $this->assertTrue(is_array($config));
         $this->assertArrayHasKey('detail_apigility', $config);
         $this->assertTrue(is_array($config['detail_apigility']));
-        $this->assertArrayHasKey('normalizer', $config['detail_apigility']);
+        $this->assertArrayHasKey('normalization', $config['detail_apigility']);
+        $this->assertTrue(is_array($config['detail_apigility']['normalization']));
+        $this->assertArrayHasKey('normalizer', $config['detail_apigility']['normalization']);
         $this->assertEquals(
             'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
-            $config['detail_apigility']['normalizer']
+            $config['detail_apigility']['normalization']['normalizer']
         );
     }
 

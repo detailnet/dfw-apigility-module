@@ -13,9 +13,10 @@ class NormalizerBasedHydratorFactory implements FactoryInterface
     {
         /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
         $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+        $normalizationOptions = $moduleOptions->getNormalization();
 
         /** @var \Detail\Normalization\Normalizer\NormalizerInterface $normalizer */
-        $normalizer = $serviceLocator->get($moduleOptions->getNormalizer());
+        $normalizer = $serviceLocator->get($normalizationOptions->getNormalizer());
 
         return new NormalizerBasedHydrator($normalizer);
     }

@@ -8,12 +8,14 @@ return array(
         ),
         'invokables' => array(
             'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler' => 'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler',
+            'Detail\Apigility\Normalization\NormalizationGroupsProvider'  => 'Detail\Apigility\Normalization\NormalizationGroupsProvider',
         ),
         'factories' => array(
-            'Detail\Apigility\Hydrator\NormalizerBasedHydrator' => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydratorFactory',
-            'Detail\Apigility\Options\ModuleOptions'            => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
-            'Detail\Apigility\View\JsonRenderer'                => 'Detail\Apigility\Factory\View\JsonRendererFactory',
-            'Detail\Apigility\View\JsonStrategy'                => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
+            'Detail\Apigility\Hydrator\NormalizerBasedHydrationListener' => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydrationListenerFactory',
+            'Detail\Apigility\Hydrator\NormalizerBasedHydrator'          => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydratorFactory',
+            'Detail\Apigility\Options\ModuleOptions'                     => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
+            'Detail\Apigility\View\JsonRenderer'                         => 'Detail\Apigility\Factory\View\JsonRendererFactory',
+            'Detail\Apigility\View\JsonStrategy'                         => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
         ),
         'initializers' => array(
             'Detail\Apigility\Rest\Resource\ResourceInitializer',
@@ -38,7 +40,15 @@ return array(
         ),
     ),
     'detail_apigility' => array(
-        'normalizer' => 'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
+        'normalization' => array(
+            'normalizer' => 'Detail\Normalization\Normalizer\JMSSerializerBasedNormalizer',
+            'groups_provider' => 'Detail\Apigility\Normalization\NormalizationGroupsProvider',
+        ),
+        'hal' => array(
+            'listeners' => array(
+                'Detail\Apigility\Hydrator\NormalizerBasedHydrationListener',
+            ),
+        ),
         'request_command_map' => array(),
     ),
 );
