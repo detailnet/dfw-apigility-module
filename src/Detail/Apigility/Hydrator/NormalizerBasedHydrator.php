@@ -2,8 +2,6 @@
 
 namespace Detail\Apigility\Hydrator;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
-
 use Detail\Normalization\Normalizer\NormalizerInterface;
 
 class NormalizerBasedHydrator implements
@@ -26,11 +24,13 @@ class NormalizerBasedHydrator implements
      * Extract values from the provided object.
      *
      * @param object $object
+     * @param array|string $groups
+     * @param string|integer $version
      * @return array
      */
-    public function extract($object)
+    public function extract($object, $groups = null, $version = null)
     {
-        return $this->normalizer->normalize($object);
+        return $this->normalizer->normalize($object, $groups, $version);
     }
 
     /**
@@ -38,12 +38,14 @@ class NormalizerBasedHydrator implements
      *
      * @param array $data
      * @param object $object
+     * @param array|string $groups
+     * @param string|integer $version
      * @return object
      */
-    public function hydrate(array $data, $object)
+    public function hydrate(array $data, $object, $groups = null, $version = null)
     {
         $class = get_class($object);
 
-        return $this->normalizer->denormalize($data, $class);
+        return $this->normalizer->denormalize($data, $class, $groups, $version);
     }
 }
