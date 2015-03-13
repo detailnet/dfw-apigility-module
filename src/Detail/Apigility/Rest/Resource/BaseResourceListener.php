@@ -174,7 +174,7 @@ class BaseResourceListener extends AbstractResourceListener implements
             }
 
             // Handle unlimited page size
-            if ($params['page_size'] === -1) {
+            if ($params['page_size'] == -1) {
                 $params['limit']  = null;
                 $params['offset'] = 0;
             } else {
