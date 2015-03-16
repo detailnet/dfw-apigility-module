@@ -25,7 +25,25 @@ class BaseResourceListener extends AbstractResourceListener implements
     use CommandDispatcherAwareTrait;
     use NormalizerAwareTrait;
 
+    /**
+     * @var array
+     */
     protected $requestCommandMap = array();
+
+    /**
+     * @var int
+     */
+    protected $pageSize = 10;
+
+    /**
+     * @var string
+     */
+    protected $pageSizeParam = 'page_size';
+
+    /**
+     * @var string
+     */
+    protected $pageParam = 'page';
 
     /**
      * @var CommandInterface
@@ -81,6 +99,54 @@ class BaseResourceListener extends AbstractResourceListener implements
     public function setRequestCommandMap(array $requestCommandMap)
     {
         $this->requestCommandMap = $requestCommandMap;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageSize()
+    {
+        return $this->pageSize;
+    }
+
+    /**
+     * @param int $pageSize
+     */
+    public function setPageSize($pageSize)
+    {
+        $this->pageSize = $pageSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageSizeParam()
+    {
+        return $this->pageSizeParam;
+    }
+
+    /**
+     * @param string $pageSizeParam
+     */
+    public function setPageSizeParam($pageSizeParam)
+    {
+        $this->pageSizeParam = $pageSizeParam;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageParam()
+    {
+        return $this->pageParam;
+    }
+
+    /**
+     * @param string $pageParam
+     */
+    public function setPageParam($pageParam)
+    {
+        $this->pageParam = $pageParam;
     }
 
     /**
@@ -164,19 +230,7 @@ class BaseResourceListener extends AbstractResourceListener implements
         $params = (array) ($event->getQueryParams() ?: array());
 
         if ($translatePaging === true) {
-            if (!isset($params['page'])) {
-                $params['page'] = 1;
-            }
-
-            if (!isset($params['page_size'])) {
-                /** @todo Get from settings (subscribe to getList.pre?) */
-                $params['page_size'] = 10;
-            }
-
-            $params['limit'] = $params['page_size'];
-            $params['offset'] = ($params['page'] - 1) * $params['page_size'];
-
-            unset($params['page'], $params['page_size']);
+            $params = $this->translatePagingParams($params);
         }
 
         if ($translateDecoded === true) {
@@ -204,6 +258,34 @@ class BaseResourceListener extends AbstractResourceListener implements
         $params = $event->getRouteMatch()->getParams();
 
         unset($params['controller']);
+
+        return $params;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    protected function translatePagingParams(array $params)
+    {
+        $pageParam = $this->getPageParam();
+        $pageSizeParam = $this->getPageSizeParam();
+
+        if (!isset($params[$pageParam])) {
+            $params[$pageParam] = 1;
+        }
+
+        if (!isset($params[$pageSizeParam])) {
+            $params[$pageSizeParam] = $this->getPageSize();
+        }
+
+        // Only define limit and offset when the page size it not set to unlimited
+        if ($params[$pageSizeParam] != -1) {
+            $params['limit']  = $params[$pageSizeParam];
+            $params['offset'] = ($params[$pageParam] - 1) * $params[$pageSizeParam];
+        }
+
+        unset($params[$pageParam], $params[$pageSizeParam]);
 
         return $params;
     }
