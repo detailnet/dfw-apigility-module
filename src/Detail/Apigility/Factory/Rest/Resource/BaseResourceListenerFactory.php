@@ -62,7 +62,7 @@ abstract class BaseResourceListenerFactory implements
             return array();
         }
 
-        foreach ($config['zf-rest'] as $controllerClass => $controllerConfig) {
+        foreach ($config['zf-rest'] as $controllerConfig) {
             if (isset($controllerConfig['listener'])
                 && $controllerConfig['listener'] === $listenerClass
             ) {

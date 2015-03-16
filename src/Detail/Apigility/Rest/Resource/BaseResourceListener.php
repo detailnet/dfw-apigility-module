@@ -229,25 +229,8 @@ class BaseResourceListener extends AbstractResourceListener implements
     ) {
         $params = (array) ($event->getQueryParams() ?: array());
 
-        $pageParam = $this->getPageParam();
-        $pageSizeParam = $this->getPageSizeParam();
-
         if ($translatePaging === true) {
-            if (!isset($params[$pageParam])) {
-                $params[$pageParam] = 1;
-            }
-
-            if (!isset($params[$pageSizeParam])) {
-                $params[$pageSizeParam] = $this->getPageSize();
-            }
-
-            // Only define limit and offset when the page size it not set to unlimited
-            if ($params[$pageSizeParam] != -1) {
-                $params['limit']  = $params[$pageSizeParam];
-                $params['offset'] = ($params[$pageParam] - 1) * $params[$pageSizeParam];
-            }
-
-            unset($params[$pageParam], $params[$pageSizeParam]);
+            $params = $this->translatePagingParams($params);
         }
 
         if ($translateDecoded === true) {
@@ -275,6 +258,34 @@ class BaseResourceListener extends AbstractResourceListener implements
         $params = $event->getRouteMatch()->getParams();
 
         unset($params['controller']);
+
+        return $params;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    protected function translatePagingParams(array $params)
+    {
+        $pageParam = $this->getPageParam();
+        $pageSizeParam = $this->getPageSizeParam();
+
+        if (!isset($params[$pageParam])) {
+            $params[$pageParam] = 1;
+        }
+
+        if (!isset($params[$pageSizeParam])) {
+            $params[$pageSizeParam] = $this->getPageSize();
+        }
+
+        // Only define limit and offset when the page size it not set to unlimited
+        if ($params[$pageSizeParam] != -1) {
+            $params['limit']  = $params[$pageSizeParam];
+            $params['offset'] = ($params[$pageParam] - 1) * $params[$pageSizeParam];
+        }
+
+        unset($params[$pageParam], $params[$pageSizeParam]);
 
         return $params;
     }
