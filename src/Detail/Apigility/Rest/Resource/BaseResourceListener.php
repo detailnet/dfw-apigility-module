@@ -325,8 +325,14 @@ class BaseResourceListener extends AbstractResourceListener implements
             case 'patchList':
             case 'replaceList':
             case 'update':
-                // Return filtered data
-                $data = $this->getInputFilter()->getValues();
+                // Return filtered data if input filter is present
+                $inputFilter = $this->getInputFilter();
+
+                if ($inputFilter !== null) {
+                    $data = $inputFilter->getValues();
+                } else {
+                    $data = $this->getQueryParams($event);
+                }
             break;
             case 'fetchAll':
                 /// Note that the paging related params are already transformed and JSON params are decoded...
