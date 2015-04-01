@@ -330,6 +330,8 @@ class BaseResourceListener extends AbstractResourceListener implements
                 // Return filtered data if input filter is present
                 $inputFilter = $this->getInputFilter();
 
+                // When there is no data, the input filter returns all fields with default value,
+                // therefore do not use input filter when body params are empty
                 if ($inputFilter !== null && !empty($data)) {
                     $data = $inputFilter->getValues();
                 }
