@@ -17,6 +17,11 @@ return array(
             'Detail\Apigility\View\JsonRenderer'                         => 'Detail\Apigility\Factory\View\JsonRendererFactory',
             'Detail\Apigility\View\JsonStrategy'                         => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
         ),
+        'delegators' => array(
+            'ZF\ContentValidation\ContentValidationListener' => array(
+                'Detail\Apigility\Factory\ContentValidation\ContentValidationListenerDelegatorFactory',
+            ),
+        ),
         'initializers' => array(
             'Detail\Apigility\Rest\Resource\ResourceInitializer',
         ),
