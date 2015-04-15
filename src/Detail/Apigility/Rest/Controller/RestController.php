@@ -83,7 +83,7 @@ class RestController extends BaseRestController
 
         if ($collection instanceof Paginator) {
             $pageSize = $collection->getCurrentItemCount();
-        } else if (is_array($collection) || $collection instanceof Countable) {
+        } elseif (is_array($collection) || $collection instanceof Countable) {
             $pageSize = count($collection);
         }
 
