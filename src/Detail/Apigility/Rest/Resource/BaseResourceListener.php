@@ -2,6 +2,7 @@
 
 namespace Detail\Apigility\Rest\Resource;
 
+use Zend\EventManager\EventManagerInterface;
 use Zend\Stdlib\Parameters;
 
 use ZF\ApiProblem\ApiProblem;
@@ -163,6 +164,18 @@ class BaseResourceListener extends AbstractResourceListener implements
     }
 
     /**
+     * Attach listeners for all Resource events
+     *
+     * @param EventManagerInterface $events
+     */
+    public function attach(EventManagerInterface $events)
+    {
+        parent::attach($events);
+
+        $events->attach('patchMultiple', array($this, 'dispatch'));
+    }
+
+    /**
      * @inheritdoc
      */
     public function dispatch(ResourceEvent $event)
@@ -193,7 +206,32 @@ class BaseResourceListener extends AbstractResourceListener implements
             return $result;
         }
 
+        switch ($event->getName()) {
+            case 'patchMultiple':
+                $ids = $event->getParam('ids', array());
+                $data = $event->getParam('data', array());
+                return $this->patchMultiple($ids, $data);
+            default:
+                // Do nothing
+                break;
+        }
+
         return parent::dispatch($event);
+    }
+
+    /**
+     * Patch (partial in-place update) multiple resources at once.
+     *
+     * This differs from patching a list, because the update is only applied
+     * to specific resources and not the complete list.
+     *
+     * @param array $ids
+     * @param array $data
+     * @return array
+     */
+    public function patchMultiple($ids, $data)
+    {
+        return new ApiProblem(405, 'The PATCH method has not been defined for specific resources');
     }
 
     /**
