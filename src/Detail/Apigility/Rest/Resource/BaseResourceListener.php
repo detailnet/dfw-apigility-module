@@ -361,8 +361,9 @@ class BaseResourceListener extends AbstractResourceListener implements
             case 'deleteList':
             case 'patch':
             case 'patchList':
-            case 'replaceList':
+            case 'patchMultiple':
             case 'update':
+            case 'replaceList':
                 $data = $this->getBodyParams($event);
 
                 // Return filtered data if input filter is present
