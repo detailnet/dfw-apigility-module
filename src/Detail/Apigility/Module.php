@@ -28,6 +28,20 @@ class Module implements
 
         $config = $serviceManager->get('Config');
 
+        // We might need to alter some dependencies of the controller...
+        if (array_key_exists('zf-rest', $config)
+            && is_array($config['zf-rest'])
+        ) {
+            $controllers = array_keys($config['zf-rest']);
+
+            foreach ($controllers as $controller) {
+                $serviceManager->get('ControllerManager')->addDelegator(
+                    $controller,
+                    __NAMESPACE__ . '\Factory\Rest\Controller\RestControllerDelegatorFactory'
+                );
+            }
+        }
+
         // Register our own normalizer based hydrator with Apigility/Hal's plugin manager so that
         // the default hydrator can be found.
         if ($serviceManager->has('ZF\Hal\MetadataMap')
