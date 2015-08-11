@@ -29,7 +29,7 @@
         "zfcampus/zf-apigility": "~1.0",
         "jms/serializer": "~0.16.0",
         "doctrine/collections": "1.2.*@dev",
-        "detailnet/dfw-core": "~0.1.1",
+        "detailnet/dfw-core": "~0.2",
         "detailnet/dfw-normalization": "~0.1.5",
         "detailnet/dfw-commanding": "~0.2.0"
     },
