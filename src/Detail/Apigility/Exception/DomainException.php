@@ -2,7 +2,7 @@
 
 namespace Detail\Apigility\Exception;
 
-class RuntimeException extends \RuntimeException implements
+class DomainException extends \DomainException implements
     ExceptionInterface
 {
 }
