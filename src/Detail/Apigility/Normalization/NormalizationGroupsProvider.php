@@ -58,6 +58,6 @@ class NormalizationGroupsProvider implements
      */
     protected function snakeCase($name)
     {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $name))));
+        return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $name)), '_');
     }
 }
