@@ -2,6 +2,8 @@
 
 namespace Detail\Apigility\Normalization;
 
+use ReflectionClass;
+
 use ZF\Hal\Collection as HalCollection;
 use ZF\Hal\Entity as HalEntity;
 
@@ -45,11 +47,30 @@ class NormalizationGroupsProvider implements
             $groups[] = $object->getCollectionName();
         } elseif ($object instanceof HalEntity) {
             $entity = $object->entity;
-            $entityName = (new \ReflectionClass($entity))->getShortName();
-            $groups[] = $this->snakeCase($entityName);
+
+            if (is_object($entity)) {
+                /** @var object $entity */
+                $entityName = $this->getEntityName($entity);
+                $groups[] = $this->snakeCase($entityName);
+            }
         }
 
         return $groups;
+    }
+
+    /**
+     * Strip namespace from object's class name.
+     *
+     * Example: Foo\Bar => Bar
+     *
+     * @param object $entity
+     * @return string
+     */
+    protected function getEntityName($entity)
+    {
+        $entityName = (new ReflectionClass($entity))->getShortName();
+
+        return $entityName;
     }
 
     /**
@@ -58,6 +79,16 @@ class NormalizationGroupsProvider implements
      */
     protected function snakeCase($name)
     {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $name))));
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $name, $matches);
+
+        $ret = $matches[0];
+
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+
+        $snakeName = implode('_', $ret);
+
+        return $snakeName;
     }
 }
