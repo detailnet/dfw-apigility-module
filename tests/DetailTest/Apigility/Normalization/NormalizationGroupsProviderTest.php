@@ -11,19 +11,6 @@ use Detail\Apigility\Normalization\NormalizationGroupsProvider;
 
 class NormalizationGroupsProviderTest extends TestCase
 {
-//    /**
-//     * @var NormalizationGroupsProvider
-//     */
-//    protected $provider;
-//
-//    /**
-//     * @return void
-//     */
-//    protected function setUp()
-//    {
-//        $this->provider = new NormalizationGroupsProvider();
-//    }
-
     /**
      * @return array
      */
@@ -72,7 +59,7 @@ class NormalizationGroupsProviderTest extends TestCase
      */
     public function testProperGroupNameForEntity($entityName, array $expectedGroups)
     {
-        $provider = $this->getMock(NormalizationGroupsProvider::CLASS, array('getEntityName'));
+        $provider = $this->getMock('Detail\Apigility\Normalization\NormalizationGroupsProvider', array('getEntityName'));
         $provider
             ->expects($this->any())
             ->method('getEntityName')
