@@ -10,6 +10,7 @@ use ZF\Rest\AbstractResourceListener;
 use ZF\Rest\ResourceEvent;
 
 use Detail\Commanding\Command\CommandInterface;
+use Detail\Commanding\Command\CollectionCommandInterface;
 use Detail\Commanding\CommandDispatcherInterface;
 use Detail\Commanding\Service\CommandDispatcherAwareInterface;
 use Detail\Commanding\Service\CommandDispatcherAwareTrait;
@@ -382,6 +383,14 @@ class BaseResourceListener extends AbstractResourceListener implements
             default:
                 // Do nothing
                 break;
+        }
+
+        if (is_a($commandClass, CollectionCommandInterface::CLASS, true)) {
+            $collectionCommand = $commandClass::create();
+            $collection = $normalizer->denormalize($data,'array<' .$collectionCommand->getObjectClassName() . '>');
+            $collectionCommand->setCollectionData($collection);
+
+            return $collectionCommand;
         }
 
         /** @todo The normalizer should know from which version to denormalize from */
