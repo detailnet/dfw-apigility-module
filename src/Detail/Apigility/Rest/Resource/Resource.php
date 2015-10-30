@@ -38,7 +38,7 @@ class Resource extends BaseResource
         $events = $this->getEventManager();
         $event = $this->prepareEvent(__FUNCTION__, array('ids' => $ids, 'data' => $data));
 
-        $results = $events->triggerUntil(
+        $results = $events->trigger(
             $event,
             function ($result) {
                 return ($result instanceof ApiProblem || $result instanceof ApiProblemResponse);
