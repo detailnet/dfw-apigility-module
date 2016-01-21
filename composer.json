@@ -31,13 +31,13 @@
         "doctrine/collections": "1.2.*@dev",
         "detailnet/dfw-core": "~0.2",
         "detailnet/dfw-normalization": "~0.1.5",
-        "detailnet/dfw-commanding": "~0.2.4"
+        "detailnet/dfw-commanding": "~0.3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4.5",
         "squizlabs/php_codesniffer" : "~2.2.0",
         "phpmd/phpmd": "~2.1.3",
-        "satooshi/php-coveralls": "dev-master"
+        "satooshi/php-coveralls": "~1.0"
     },
     "autoload": {
         "psr-0": {
