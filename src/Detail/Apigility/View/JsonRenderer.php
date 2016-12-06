@@ -2,13 +2,8 @@
 
 namespace Detail\Apigility\View;
 
-use Countable;
-
-use Zend\Paginator\Paginator;
 use Zend\View\Model\ModelInterface;
 use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
-
-use ZF\Hal\Collection as HalCollection;
 
 use Detail\Normalization\Normalizer\NormalizerInterface;
 use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;

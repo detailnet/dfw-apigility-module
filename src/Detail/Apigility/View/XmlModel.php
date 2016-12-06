@@ -20,7 +20,7 @@ class XmlModel extends ViewModel implements
     /**
      * Does the payload represent a HAL collection?
      *
-     * @return bool
+     * @return boolean
      */
     public function isCollection()
     {

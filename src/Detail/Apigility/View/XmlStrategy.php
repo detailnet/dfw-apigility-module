@@ -9,7 +9,7 @@ use Zend\View\ViewEvent;
 class XmlStrategy extends AbstractListenerAggregate
 {
     /**
-     * Character set for associated content-type
+     * Character set for associated content-type.
      *
      * @var string
      */
@@ -21,9 +21,7 @@ class XmlStrategy extends AbstractListenerAggregate
     protected $renderer;
 
     /**
-     * Constructor
-     *
-     * @param  XmlRenderer $renderer
+     * @param XmlRenderer $renderer
      */
     public function __construct(XmlRenderer $renderer)
     {
@@ -40,7 +38,7 @@ class XmlStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * Set the content-type character set
+     * Set the content-type character set.
      *
      * @param  string $charset
      * @return XmlStrategy
@@ -52,7 +50,7 @@ class XmlStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * Retrieve the current character set
+     * Retrieve the current character set.
      *
      * @return string
      */
