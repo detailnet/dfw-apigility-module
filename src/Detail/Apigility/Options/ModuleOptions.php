@@ -7,7 +7,7 @@ use Detail\Core\Options\AbstractOptions;
 class ModuleOptions extends AbstractOptions
 {
     /**
-     * @var array
+     * @var Normalization\NormalizationOptions
      */
     protected $normalization;
 

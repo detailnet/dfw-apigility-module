@@ -386,8 +386,9 @@ class BaseResourceListener extends AbstractResourceListener implements
         }
 
         if (is_a($commandClass, CollectionCommandInterface::CLASS, true)) {
+            /** @var CollectionCommandInterface $collectionCommand */
             $collectionCommand = $commandClass::create();
-            $collection = $normalizer->denormalize($data,'array<' .$collectionCommand->getObjectClassName() . '>');
+            $collection = $normalizer->denormalize($data, 'array<' . $collectionCommand->getObjectClassName() . '>');
             $collectionCommand->setCollectionData($collection);
 
             return $collectionCommand;

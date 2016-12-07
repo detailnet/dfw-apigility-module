@@ -51,8 +51,7 @@ class XmlRenderer implements
             /** @todo Throw exception */
         }
 
-        /** @todo We have PHP arrays now, how to get to XML? Should the normalizer support serialization to XML directly */
-        return var_export($payload, true); // This does NOT return XML as it should!
+        return $payload;
     }
 
     /**
@@ -79,5 +78,13 @@ class XmlRenderer implements
     {
         // Just ignore (we don't need a resolver)
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSerializationFormat()
+    {
+        return 'xml';
     }
 }

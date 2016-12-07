@@ -8,8 +8,10 @@ use Zend\Paginator\Paginator;
 
 use ZF\Hal\Collection as HalCollection;
 
-use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
+use Detail\Apigility\Exception;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareTrait;
+use Detail\Normalization\Normalizer\SerializerInterface;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
 
 trait NormalizerBasedRendererTrait
 {
@@ -18,7 +20,7 @@ trait NormalizerBasedRendererTrait
 
     /**
      * @param ModelInterface $model
-     * @return array|null
+     * @return array|string|null
      */
     protected function normalizeEntityOrCollection(ModelInterface $model)
     {
@@ -28,7 +30,7 @@ trait NormalizerBasedRendererTrait
             $entity = $halEntity->entity;
             $normalizationGroups = $this->getNormalizationGroups($halEntity);
 
-            return $this->getNormalizer()->normalize($entity, $normalizationGroups);
+            return $this->normalize($entity, $normalizationGroups);
         }
 
         if ($model->isCollection()) {
@@ -43,7 +45,7 @@ trait NormalizerBasedRendererTrait
 
     /**
      * @param HalCollection $halCollection
-     * @return array
+     * @return array|string
      */
     protected function normalizeCollection(HalCollection $halCollection)
     {
@@ -60,14 +62,14 @@ trait NormalizerBasedRendererTrait
 
             /** @todo Force snake case as collection name? */
             $payload = array(
-                $collectionName => $this->getNormalizer()->normalize($items, $normalizationGroups),
+                $collectionName => $this->normalize($items, $normalizationGroups),
                 'page_count' => (int) (isset($attributes['page_count']) ? $attributes['page_count'] : $collection->count()),
                 'page_size' => $pageSize,
                 'total_items' => (int) (isset($attributes['total_items']) ? $attributes['total_items'] : $collection->getTotalItemCount()),
             );
         } else {
             $payload = array(
-                $collectionName => $this->getNormalizer()->normalize($collection, $normalizationGroups),
+                $collectionName => $this->normalize($collection, $normalizationGroups),
             );
 
             if (is_array($collection) || $collection instanceof Countable) {
@@ -78,6 +80,35 @@ trait NormalizerBasedRendererTrait
         $payload = array_merge($attributes, $payload);
 
         return $payload;
+    }
+
+    /**
+     * @param mixed $object
+     * @param array|string|null $groups
+     * @return array|string
+     */
+    protected function normalize($object, $groups = null)
+    {
+        $normalizer = $this->getNormalizer();
+        $format = $this->getSerializationFormat();
+        
+        if ($format !== null) {
+            if (!$normalizer instanceof SerializerInterface) {
+                throw new Exception\RuntimeException(
+                    sprintf(
+                        'Rendering to format "%s" required a Normalizer with serialization capabilities;' .
+                        'the given %s does not implement %s',
+                        $format,
+                        get_class($normalizer),
+                        SerializerInterface::CLASS
+                    )
+                );
+            }
+
+            return $normalizer->serialize($object, $format, $groups);
+        } else {
+            return $normalizer->normalize($object, $groups);
+        }
     }
 
     /**
@@ -93,5 +124,13 @@ trait NormalizerBasedRendererTrait
         }
 
         return $groupsProvider->getGroups($object);
+    }
+    
+    /**
+     * @return string|null
+     */
+    protected function getSerializationFormat()
+    {
+        return null;
     }
 }
