@@ -62,12 +62,12 @@ class XmlStrategy extends AbstractListenerAggregate
     /**
      * Detect if we should use the XmlRenderer based on model type
      *
-     * @param  ViewEvent $e
+     * @param  ViewEvent $event
      * @return null|XmlRenderer
      */
-    public function selectRenderer(ViewEvent $e)
+    public function selectRenderer(ViewEvent $event)
     {
-        $model = $e->getModel();
+        $model = $event->getModel();
 
         if (!$model instanceof XmlModel) {
             // no XmlModel; do nothing
@@ -81,19 +81,19 @@ class XmlStrategy extends AbstractListenerAggregate
     /**
      * Inject the response with the XML payload and appropriate Content-Type header
      *
-     * @param ViewEvent $e
+     * @param ViewEvent $event
      * @return void
      */
-    public function injectResponse(ViewEvent $e)
+    public function injectResponse(ViewEvent $event)
     {
-        $renderer = $e->getRenderer();
+        $renderer = $event->getRenderer();
 
         if ($renderer !== $this->renderer) {
             // Discovered renderer is not ours; do nothing
             return;
         }
 
-        $result = $e->getResult();
+        $result = $event->getResult();
 
         if (!is_string($result)) {
             // We don't have a string, and thus, no XML
@@ -102,7 +102,7 @@ class XmlStrategy extends AbstractListenerAggregate
 
         // Populate response
         /** @var \Zend\Http\Response $response */
-        $response = $e->getResponse();
+        $response = $event->getResponse();
         $response->setContent($result);
         $headers = $response->getHeaders();
 
