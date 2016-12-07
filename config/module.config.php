@@ -16,6 +16,8 @@ return array(
             'Detail\Apigility\Options\ModuleOptions'                     => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
             'Detail\Apigility\View\JsonRenderer'                         => 'Detail\Apigility\Factory\View\JsonRendererFactory',
             'Detail\Apigility\View\JsonStrategy'                         => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
+            'Detail\Apigility\View\XmlRenderer'                         => 'Detail\Apigility\Factory\View\XmlRendererFactory',
+            'Detail\Apigility\View\XmlStrategy'                         => 'Detail\Apigility\Factory\View\XmlStrategyFactory',
         ),
         'delegators' => array(
             'ZF\ContentValidation\ContentValidationListener' => array(

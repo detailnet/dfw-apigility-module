@@ -7,11 +7,18 @@ use Zend\View\ViewEvent;
 
 class JsonStrategy extends BaseJsonStrategy
 {
+    /**
+     * @param JsonRenderer $renderer
+     */
     public function __construct(JsonRenderer $renderer)
     {
-        $this->renderer = $renderer;
+        parent::__construct($renderer);
     }
 
+    /**
+     * @param ViewEvent $event
+     * @return JsonRenderer|null
+     */
     public function selectRenderer(ViewEvent $event)
     {
         $model = $event->getModel();

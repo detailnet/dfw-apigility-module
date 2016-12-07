@@ -18,6 +18,9 @@ class Module implements
     ControllerProviderInterface,
     ServiceProviderInterface
 {
+    /**
+     * @param MvcEvent $event
+     */
     public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
@@ -89,6 +92,9 @@ class Module implements
         );
     }
 
+    /**
+     * @param MvcEvent $event
+     */
     public function onDispatch(MvcEvent $event)
     {
         /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
@@ -109,24 +115,22 @@ class Module implements
         }
     }
 
+    /**
+     * @param MvcEvent $event
+     */
     public function onRender(MvcEvent $event)
     {
         $result = $event->getResult();
 
-        if (!$result instanceof View\JsonModel) {
-            return;
+        if ($result instanceof View\JsonModel) {
+            // Register at high priority, to "beat" normal HalJson and Json strategies registered
+            // via view manager
+            $this->attachViewStrategy($event, __NAMESPACE__ . '\View\JsonStrategy', 300);
         }
 
-        /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
-        $serviceManager = $event->getTarget()->getServiceManager();
-
-        /** @var \Zend\View\View $view */
-        $view = $serviceManager->get('View');
-        $eventManager = $view->getEventManager();
-
-        // Register at high priority, to "beat" normal HalJson and Json strategies registered
-        // via view manager
-        $eventManager->attach($serviceManager->get(__NAMESPACE__ . '\View\JsonStrategy'), 300);
+        if ($result instanceof View\XmlModel) {
+            $this->attachViewStrategy($event, __NAMESPACE__ . '\View\XmlStrategy');
+        }
     }
 
     /**
@@ -159,5 +163,24 @@ class Module implements
     public function getServiceConfig()
     {
         return array();
+    }
+
+    /**
+     * @param MvcEvent $event
+     * @param string $class
+     * @param integer $priority
+     */
+    protected function attachViewStrategy(MvcEvent $event, $class, $priority = 100)
+    {
+        /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
+        $serviceManager = $event->getTarget()->getServiceManager();
+
+        /** @var \Zend\View\View $view */
+        $view = $serviceManager->get('View');
+        $eventManager = $view->getEventManager();
+
+        // Register at high priority, to "beat" normal HalJson and Json strategies registered
+        // via view manager
+        $eventManager->attach($serviceManager->get($class), $priority);
     }
 }

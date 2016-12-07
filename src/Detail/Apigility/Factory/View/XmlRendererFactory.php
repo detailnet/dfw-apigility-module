@@ -5,9 +5,9 @@ namespace Detail\Apigility\Factory\View;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\FactoryInterface;
 
-use Detail\Apigility\View\JsonRenderer;
+use Detail\Apigility\View\XmlRenderer;
 
-class JsonRendererFactory implements
+class XmlRendererFactory implements
     FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
@@ -24,7 +24,7 @@ class JsonRendererFactory implements
         /** @var \Detail\Apigility\Normalization\NormalizationGroupsProviderInterface $normalizationGroupsProvider */
         $normalizationGroupsProvider = $serviceLocator->get($normalizationOptions->getGroupsProvider());
 
-        $renderer = new JsonRenderer($normalizer, $normalizationGroupsProvider);
+        $renderer = new XmlRenderer($normalizer, $normalizationGroupsProvider);
 //        $renderer->setHelperPluginManager($helpers);
 
         return $renderer;
