@@ -2,7 +2,7 @@
 
 namespace Detail\Apigility\View;
 
-use Zend\View\Model\ModelInterface;
+use Zend\View\Model\ModelInterface as ZendModelInterface;
 use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
 
 use Detail\Normalization\Normalizer\NormalizerInterface;
@@ -33,7 +33,7 @@ class JsonRenderer extends BaseJsonRenderer implements
     }
 
     /**
-     * @param ModelInterface|string $nameOrModel
+     * @param ZendModelInterface|string $nameOrModel
      * @param array|null| $values
      * @return string
      */
