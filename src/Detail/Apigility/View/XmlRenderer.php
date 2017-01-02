@@ -2,7 +2,7 @@
 
 namespace Detail\Apigility\View;
 
-use Zend\View\Model\ModelInterface;
+use Zend\View\Model\ModelInterface as ViewModelInterface;
 use Zend\View\Renderer\RendererInterface;
 
 use Detail\Normalization\Normalizer\NormalizerInterface;
@@ -35,7 +35,7 @@ class XmlRenderer implements
     }
 
     /**
-     * @param ModelInterface|string $nameOrModel
+     * @param ViewModelInterface|string $nameOrModel
      * @param array|null| $values
      * @return string
      */
@@ -71,7 +71,7 @@ class XmlRenderer implements
     /**
      * Set the resolver used to map a template name to a resource the renderer may consume.
      *
-     * @param  ResolverInterface $resolver
+     * @param ResolverInterface $resolver
      * @return RendererInterface
      */
     public function setResolver(ResolverInterface $resolver)
