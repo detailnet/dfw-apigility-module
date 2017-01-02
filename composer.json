@@ -28,7 +28,7 @@
         "zendframework/zend-view": "2.*",
         "zfcampus/zf-apigility": "~1.0",
         "jms/serializer": "~0.16.0",
-        "doctrine/collections": "1.2.*@dev",
+        "doctrine/collections": "^1.2.0",
         "detailnet/dfw-core": "~0.2",
         "detailnet/dfw-normalization": "~0.2.0",
         "detailnet/dfw-commanding": "~0.5.0"

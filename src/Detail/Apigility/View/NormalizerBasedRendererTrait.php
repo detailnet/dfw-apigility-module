@@ -27,7 +27,7 @@ trait NormalizerBasedRendererTrait
         if ($model->isEntity()) {
             /** @var \ZF\Hal\Entity $halEntity */
             $halEntity = $model->getPayload();
-            $entity = $halEntity->entity;
+            $entity = $halEntity->getEntity();
             $normalizationGroups = $this->getNormalizationGroups($halEntity);
 
             return $this->normalize($entity, $normalizationGroups);

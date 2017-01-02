@@ -46,7 +46,7 @@ class NormalizationGroupsProvider implements
         if ($object instanceof HalCollection) {
             $groups[] = $object->getCollectionName();
         } elseif ($object instanceof HalEntity) {
-            $entity = $object->entity;
+            $entity = $object->getEntity();
 
             if (is_object($entity)) {
                 /** @var object $entity */
