@@ -5,35 +5,11 @@ namespace Detail\Apigility\View;
 use Zend\View\Model\ModelInterface as ViewModelInterface;
 use Zend\View\Renderer\RendererInterface;
 
-use Detail\Normalization\Normalizer\NormalizerInterface;
-use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;
-
-use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
-use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 use Zend\View\Resolver\ResolverInterface;
 
-class XmlRenderer implements
-    NormalizerAwareInterface,
-    NormalizationGroupsProviderAwareInterface,
+class ImageRenderer implements
     RendererInterface
 {
-    use NormalizerBasedRendererTrait;
-
-    /**
-     * @param NormalizerInterface $normalizer
-     * @param NormalizationGroupsProviderInterface $normalizationGroupsProvider
-     */
-    public function __construct(
-        NormalizerInterface $normalizer,
-        NormalizationGroupsProviderInterface $normalizationGroupsProvider = null
-    ) {
-        $this->setNormalizer($normalizer);
-
-        if ($normalizationGroupsProvider !== null) {
-            $this->setNormalizationGroupsProvider($normalizationGroupsProvider);
-        }
-    }
-
     /**
      * @param ViewModelInterface|string $nameOrModel
      * @param array|null $values
@@ -41,11 +17,11 @@ class XmlRenderer implements
      */
     public function render($nameOrModel, $values = null)
     {
-        if (!$nameOrModel instanceof XmlModel) {
+        if (!$nameOrModel instanceof ImageModel) {
             /** @todo Throw exception */
         }
 
-        $payload = $this->normalizeEntityOrCollection($nameOrModel);
+        $payload = $this->renderImage($nameOrModel);
 
         if ($payload === null) {
             /** @todo Throw exception */
@@ -81,10 +57,22 @@ class XmlRenderer implements
     }
 
     /**
-     * @return string
+     * @param ModelInterface $model
+     * @return string|null
      */
-    protected function getSerializationFormat()
+    protected function renderImage(ModelInterface $model)
     {
-        return 'xml';
+        if ($model->isEntity()) {
+            /** @var \ZF\Hal\Entity $halEntity */
+            $halEntity = $model->getPayload();
+            // zf-hal:1.4.0 introduced a getter for entities and deprecated the access through the public property
+            if (method_exists($halEntity, 'getEntity')) {
+                $entity = $halEntity->getEntity();
+            } else {
+                $entity = $halEntity->entity;
+            }
+
+            /** @todo How can we fetch the image from the URL? */
+        }
     }
 }

@@ -131,6 +131,10 @@ class Module implements
         if ($result instanceof View\XmlModel) {
             $this->attachViewStrategy($event, __NAMESPACE__ . '\View\XmlStrategy');
         }
+
+        if ($result instanceof View\ImageModel) {
+            $this->attachViewStrategy($event, __NAMESPACE__ . '\View\ImageStrategy');
+        }
     }
 
     /**
@@ -178,9 +182,6 @@ class Module implements
         /** @var \Zend\View\View $view */
         $view = $serviceManager->get('View');
         $eventManager = $view->getEventManager();
-
-        // Register at high priority, to "beat" normal HalJson and Json strategies registered
-        // via view manager
         $eventManager->attach($serviceManager->get($class), $priority);
     }
 }
