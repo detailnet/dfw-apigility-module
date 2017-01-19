@@ -11,13 +11,18 @@ return array(
             'Detail\Apigility\Normalization\NormalizationGroupsProvider'  => 'Detail\Apigility\Normalization\NormalizationGroupsProvider',
         ),
         'factories' => array(
+            // Generic
             'Detail\Apigility\Hydrator\NormalizerBasedHydrationListener' => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydrationListenerFactory',
-            'Detail\Apigility\Hydrator\NormalizerBasedHydrator'          => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydratorFactory',
-            'Detail\Apigility\Options\ModuleOptions'                     => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
-            'Detail\Apigility\View\JsonRenderer'                         => 'Detail\Apigility\Factory\View\JsonRendererFactory',
-            'Detail\Apigility\View\JsonStrategy'                         => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
-            'Detail\Apigility\View\XmlRenderer'                         => 'Detail\Apigility\Factory\View\XmlRendererFactory',
-            'Detail\Apigility\View\XmlStrategy'                         => 'Detail\Apigility\Factory\View\XmlStrategyFactory',
+            'Detail\Apigility\Hydrator\NormalizerBasedHydrator' => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydratorFactory',
+            'Detail\Apigility\Options\ModuleOptions' => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
+
+            // JSON
+            'Detail\Apigility\View\JsonRenderer' => 'Detail\Apigility\Factory\View\JsonRendererFactory',
+            'Detail\Apigility\View\JsonStrategy' => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
+            
+            // XML
+            'Detail\Apigility\View\XmlRenderer' => 'Detail\Apigility\Factory\View\XmlRendererFactory',
+            'Detail\Apigility\View\XmlStrategy' => 'Detail\Apigility\Factory\View\XmlStrategyFactory',
         ),
         'delegators' => array(
             'ZF\ContentValidation\ContentValidationListener' => array(

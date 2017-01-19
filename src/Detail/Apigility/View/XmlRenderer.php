@@ -36,7 +36,7 @@ class XmlRenderer implements
 
     /**
      * @param ViewModelInterface|string $nameOrModel
-     * @param array|null| $values
+     * @param array|null $values
      * @return string
      */
     public function render($nameOrModel, $values = null)
