@@ -131,10 +131,6 @@ class Module implements
         if ($result instanceof View\XmlModel) {
             $this->attachViewStrategy($event, __NAMESPACE__ . '\View\XmlStrategy');
         }
-
-        if ($result instanceof View\ImageModel) {
-            $this->attachViewStrategy($event, __NAMESPACE__ . '\View\ImageStrategy');
-        }
     }
 
     /**
