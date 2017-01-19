@@ -16,10 +16,6 @@ return array(
             'Detail\Apigility\Hydrator\NormalizerBasedHydrator' => 'Detail\Apigility\Factory\Hydrator\NormalizerBasedHydratorFactory',
             'Detail\Apigility\Options\ModuleOptions' => 'Detail\Apigility\Factory\Options\ModuleOptionsFactory',
 
-            // Image
-            'Detail\Apigility\View\ImageRenderer' => 'Detail\Apigility\Factory\View\ImageRendererFactory',
-            'Detail\Apigility\View\ImageStrategy' => 'Detail\Apigility\Factory\View\ImageStrategyFactory',
-            
             // JSON
             'Detail\Apigility\View\JsonRenderer' => 'Detail\Apigility\Factory\View\JsonRendererFactory',
             'Detail\Apigility\View\JsonStrategy' => 'Detail\Apigility\Factory\View\JsonStrategyFactory',
