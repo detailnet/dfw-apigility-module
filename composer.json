@@ -1,13 +1,13 @@
 {
     "name": "detailnet/dfw-apigility-module",
-    "description": "Zend Framework 2 Module containing tools for ZF Apigility",
+    "description": "Zend Framework Module containing tools for ZF Apigility",
     "type": "library",
     "keywords": [
         "dfw",
         "detailnet",
         "apigility",
         "module",
-        "zf2"
+        "zf"
     ],
     "homepage": "https://github.com/detailnet/dfw-normalization-module/",
     "license": "MIT",
@@ -18,26 +18,26 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "zendframework/zend-loader": "2.*",
-        "zendframework/zend-modulemanager": "2.*",
-        "zendframework/zend-mvc": "2.*",
-        "zendframework/zend-paginator": "2.*",
-        "zendframework/zend-servicemanager": "2.*",
-        "zendframework/zend-stdlib": "2.*",
-        "zendframework/zend-view": "2.*",
-        "zfcampus/zf-apigility": "~1.0",
-        "jms/serializer": "~0.16.0",
+        "php": "^7.0",
+        "zendframework/zend-loader": "^2.5.1",
+        "zendframework/zend-modulemanager": "^2.7.2",
+        "zendframework/zend-mvc": "^3.0.1",
+        "zendframework/zend-paginator": "^2.7",
+        "zendframework/zend-servicemanager": "^3.1",
+        "zendframework/zend-stdlib": "^3.0.1",
+        "zendframework/zend-view": "^2.8",
+        "zfcampus/zf-apigility": "^1.3",
+        "jms/serializer": "^1.5",
         "doctrine/collections": "^1.2.0",
-        "detailnet/dfw-core": "~0.2",
-        "detailnet/dfw-normalization": "~0.2.0",
-        "detailnet/dfw-commanding": "~0.5.0"
+        "detailnet/dfw-core": "^0.3",
+        "detailnet/dfw-normalization": "^1.0",
+        "detailnet/dfw-commanding": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.4.5",
-        "squizlabs/php_codesniffer" : "~2.2.0",
-        "phpmd/phpmd": "~2.1.3",
-        "satooshi/php-coveralls": "~1.0"
+        "phpunit/phpunit": "^6.0",
+        "squizlabs/php_codesniffer" : "^2.2",
+        "phpmd/phpmd": "^2.2",
+        "satooshi/php-coveralls": "^1.0"
     },
     "autoload": {
         "psr-0": {

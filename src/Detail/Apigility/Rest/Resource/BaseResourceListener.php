@@ -168,8 +168,9 @@ class BaseResourceListener extends AbstractResourceListener implements
      * Attach listeners for all Resource events
      *
      * @param EventManagerInterface $events
+     * @param integer $priority
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         parent::attach($events);
 
@@ -228,7 +229,7 @@ class BaseResourceListener extends AbstractResourceListener implements
      *
      * @param array $ids
      * @param array $data
-     * @return array
+     * @return array|ApiProblem
      */
     public function patchMultiple($ids, $data)
     {
@@ -242,6 +243,7 @@ class BaseResourceListener extends AbstractResourceListener implements
      */
     protected function onBeforeDispatch(ResourceEvent $event, CommandInterface $command = null)
     {
+        return true;
     }
 
     /**
@@ -331,7 +333,7 @@ class BaseResourceListener extends AbstractResourceListener implements
 
     /**
      * @param ResourceEvent $event
-     * @return CommandInterface
+     * @return CommandInterface|CollectionCommandInterface
      */
     protected function createCommand(ResourceEvent $event)
     {

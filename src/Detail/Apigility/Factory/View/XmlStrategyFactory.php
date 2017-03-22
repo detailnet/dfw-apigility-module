@@ -2,18 +2,28 @@
 
 namespace Detail\Apigility\Factory\View;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
 
+use Zend\ServiceManager\Factory\FactoryInterface;
+
+use Detail\Apigility\View\XmlRenderer;
 use Detail\Apigility\View\XmlStrategy;
 
 class XmlStrategyFactory implements
     FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * Create XmlStrategy
+     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return XmlStrategy
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var \Detail\Apigility\View\XmlRenderer $renderer */
-        $renderer = $serviceLocator->get('Detail\Apigility\View\XmlRenderer');
+        /** @var XmlRenderer $renderer */
+        $renderer = $container->get(XmlRenderer::CLASS);
 
         $strategy = new XmlStrategy($renderer);
 

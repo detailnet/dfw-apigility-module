@@ -1,4 +1,4 @@
-# Zend Framework 2 Module containing tools for ZF Apigility
+# Zend Framework Module containing tools for ZF Apigility
 
 [![Build Status](https://travis-ci.org/detailnet/dfw-apigility-module.svg?branch=master)](https://travis-ci.org/detailnet/dfw-apigility-module)
 [![Coverage Status](https://img.shields.io/coveralls/detailnet/dfw-apigility-module.svg)](https://coveralls.io/r/detailnet/dfw-apigility-module)
@@ -9,7 +9,7 @@
 This module contains tools for [ZF Apigility](https://github.com/detailnet/dfw-normalization).
 
 ## Requirements
-[Zend Framework 2 Skeleton Application](http://www.github.com/zendframework/ZendSkeletonApplication) (or compatible architecture)
+[Zend Framework Skeleton Application](http://www.github.com/zendframework/ZendSkeletonApplication) (or compatible architecture)
 
 ## Installation
 Install the module through [Composer](http://getcomposer.org/) using the following steps:
@@ -21,7 +21,7 @@ Install the module through [Composer](http://getcomposer.org/) using the followi
      ```json
      {
          "require": {
-             "detailnet/dfw-apigility-module": "1.x-dev"
+             "detailnet/dfw-apigility-module": "^1.0"
          }
      }
      ```

@@ -2,18 +2,28 @@
 
 namespace Detail\Apigility\Factory\View;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
 
+use Zend\ServiceManager\Factory\FactoryInterface;
+
+use Detail\Apigility\View\JsonRenderer;
 use Detail\Apigility\View\JsonStrategy;
 
 class JsonStrategyFactory implements
     FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * Create JsonStrategy
+     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return JsonStrategy
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var \Detail\Apigility\View\JsonRenderer $renderer */
-        $renderer = $serviceLocator->get('Detail\Apigility\View\JsonRenderer');
+        /** @var JsonRenderer $renderer */
+        $renderer = $container->get(JsonRenderer::CLASS);
 
         $strategy = new JsonStrategy($renderer);
 

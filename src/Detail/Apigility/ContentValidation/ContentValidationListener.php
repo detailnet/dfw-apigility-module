@@ -14,7 +14,7 @@ class ContentValidationListener implements
     ListenerAggregateInterface
 {
     /**
-     * @var \Zend\Stdlib\CallbackHandler[]
+     * @var array
      */
     protected $listeners = array();
 
@@ -33,9 +33,10 @@ class ContentValidationListener implements
 
     /**
      * @param EventManagerInterface $events
+     * @param integer $priority
      * @return void
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         // Trigger after authentication/authorization and content negotiation
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -650);
@@ -48,9 +49,9 @@ class ContentValidationListener implements
     public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $index => $callback) {
-            if ($events->detach($callback)) {
-                unset($this->listeners[$index]);
-            }
+            $events->detach($callback);
+
+            unset($this->listeners[$index]);
         }
     }
 

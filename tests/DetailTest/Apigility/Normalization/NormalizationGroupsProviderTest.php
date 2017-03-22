@@ -2,9 +2,8 @@
 
 namespace DetailTest\Apigility\Normalization;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
-use ZF\Hal\Collection as HalCollection;
 use ZF\Hal\Entity as HalEntity;
 
 use Detail\Apigility\Normalization\NormalizationGroupsProvider;
@@ -59,7 +58,10 @@ class NormalizationGroupsProviderTest extends TestCase
      */
     public function testProperGroupNameForEntity($entityName, array $expectedGroups)
     {
-        $provider = $this->getMock('Detail\Apigility\Normalization\NormalizationGroupsProvider', array('getEntityName'));
+        $provider = $this->getMockBuilder(NormalizationGroupsProvider::CLASS)
+            ->setMethods(array('getEntityName'))
+            ->getMock();
+        
         $provider
             ->expects($this->any())
             ->method('getEntityName')

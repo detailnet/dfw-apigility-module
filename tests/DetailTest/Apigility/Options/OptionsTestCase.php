@@ -2,7 +2,7 @@
 
 namespace DetailTest\Apigility\Options;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 abstract class OptionsTestCase extends TestCase
 {
@@ -15,7 +15,7 @@ abstract class OptionsTestCase extends TestCase
     {
         $mockedMethods = array_diff($this->getMethods($class), $methods);
 
-        return $this->getMock($class, $mockedMethods);
+        return $this->getMockBuilder($class)->setMethods($mockedMethods)->getMock();
     }
 
     /**
@@ -24,7 +24,7 @@ abstract class OptionsTestCase extends TestCase
      * This includes methods of parent classes.
      *
      * @param string $class
-     * @param bool $autoload
+     * @param boolean $autoload
      * @return array
      */
     protected function getMethods($class, $autoload = true)

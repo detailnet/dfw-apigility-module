@@ -2,24 +2,37 @@
 
 namespace Detail\Apigility\Factory\Hydrator;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 use Detail\Apigility\Hydrator\NormalizerBasedHydrationListener;
+use Detail\Apigility\Hydrator\NormalizerBasedHydrator;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
+use Detail\Apigility\Options\ModuleOptions;
 
-class NormalizerBasedHydrationListenerFactory implements FactoryInterface
+class NormalizerBasedHydrationListenerFactory implements
+    FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * Create NormalizerBasedHydrationListener
+     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param null|array $options
+     * @return NormalizerBasedHydrationListener
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
-        $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+        /** @var ModuleOptions $moduleOptions */
+        $moduleOptions = $container->get(ModuleOptions::CLASS);
         $normalizationOptions = $moduleOptions->getNormalization();
 
-        /** @var \Detail\Apigility\Hydrator\NormalizerBasedHydrator $normalizationBasedHydrator */
-        $normalizationBasedHydrator = $serviceLocator->get('Detail\Apigility\Hydrator\NormalizerBasedHydrator');
+        /** @var NormalizerBasedHydrator $normalizationBasedHydrator */
+        $normalizationBasedHydrator = $container->get(NormalizerBasedHydrator::CLASS);
 
-        /** @var \Detail\Apigility\Normalization\NormalizationGroupsProviderInterface $normalizationGroupsProvider */
-        $normalizationGroupsProvider = $serviceLocator->get($normalizationOptions->getGroupsProvider());
+        /** @var NormalizationGroupsProviderInterface $normalizationGroupsProvider */
+        $normalizationGroupsProvider = $container->get($normalizationOptions->getGroupsProvider());
 
         return new NormalizerBasedHydrationListener($normalizationBasedHydrator, $normalizationGroupsProvider);
     }
