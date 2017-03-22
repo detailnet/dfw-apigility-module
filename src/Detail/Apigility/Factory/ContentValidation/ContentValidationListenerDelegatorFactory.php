@@ -2,20 +2,26 @@
 
 namespace Detail\Apigility\Factory\ContentValidation;
 
-use Zend\ServiceManager\DelegatorFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+
+use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 
 use Detail\Apigility\ContentValidation\ContentValidationListener;
 
 class ContentValidationListenerDelegatorFactory implements
     DelegatorFactoryInterface
 {
-    public function createDelegatorWithName(
-        ServiceLocatorInterface $serviceLocator,
-        $name,
-        $requestedName,
-        $callback
-    ) {
+    /**
+     * Create ContentValidationListener
+     *
+     * @param ContainerInterface $container
+     * @param string $name
+     * @param callable $callback
+     * @param array|null $options
+     * @return ContentValidationListener
+     */
+    public function __invoke(ContainerInterface $container, $name, callable $callback, array $options = null)
+    {
         $listener = $callback();
 
         return new ContentValidationListener($listener);

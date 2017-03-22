@@ -2,21 +2,32 @@
 
 namespace Detail\Apigility\Factory\Hydrator;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 use Detail\Apigility\Hydrator\NormalizerBasedHydrator;
+use Detail\Apigility\Options\ModuleOptions;
 
-class NormalizerBasedHydratorFactory implements FactoryInterface
+class NormalizerBasedHydratorFactory implements
+    FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * Create NormalizerBasedHydrator
+     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return NormalizerBasedHydrator
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
-        $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+        /** @var ModuleOptions $moduleOptions */
+        $moduleOptions = $container->get(ModuleOptions::CLASS);
         $normalizationOptions = $moduleOptions->getNormalization();
 
         /** @var \Detail\Normalization\Normalizer\NormalizerInterface $normalizer */
-        $normalizer = $serviceLocator->get($normalizationOptions->getNormalizer());
+        $normalizer = $container->get($normalizationOptions->getNormalizer());
 
         return new NormalizerBasedHydrator($normalizer);
     }

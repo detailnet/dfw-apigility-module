@@ -2,27 +2,40 @@
 
 namespace Detail\Apigility\Factory\View;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
 
+use Zend\ServiceManager\Factory\FactoryInterface;
+
+use Detail\Normalization\Normalizer\NormalizerInterface;
+
+use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
+use Detail\Apigility\Options\ModuleOptions;
 use Detail\Apigility\View\XmlRenderer;
 
 class XmlRendererFactory implements
     FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * Create XmlRenderer
+     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|array $options
+     * @return XmlRenderer
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
 //        $helpers = $serviceLocator->get('ViewHelperManager');
 
-        /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
-        $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+        /** @var ModuleOptions $moduleOptions */
+        $moduleOptions = $container->get(ModuleOptions::CLASS);
         $normalizationOptions = $moduleOptions->getNormalization();
 
-        /** @var \Detail\Normalization\Normalizer\NormalizerInterface $normalizer */
-        $normalizer = $serviceLocator->get($normalizationOptions->getNormalizer());
+        /** @var NormalizerInterface $normalizer */
+        $normalizer = $container->get($normalizationOptions->getNormalizer());
 
-        /** @var \Detail\Apigility\Normalization\NormalizationGroupsProviderInterface $normalizationGroupsProvider */
-        $normalizationGroupsProvider = $serviceLocator->get($normalizationOptions->getGroupsProvider());
+        /** @var NormalizationGroupsProviderInterface $normalizationGroupsProvider */
+        $normalizationGroupsProvider = $container->get($normalizationOptions->getGroupsProvider());
 
         $renderer = new XmlRenderer($normalizer, $normalizationGroupsProvider);
 //        $renderer->setHelperPluginManager($helpers);

@@ -2,17 +2,20 @@
 
 namespace DetailTest\Apigility\Options;
 
+use Detail\Apigility\Options\ModuleOptions;
+use Detail\Apigility\Options\Normalization\NormalizationOptions;
+
 class ModuleOptionsTest extends OptionsTestCase
 {
     /**
-     * @var \Detail\Apigility\Options\ModuleOptions
+     * @var ModuleOptions
      */
     protected $options;
 
     protected function setUp()
     {
         $this->options = $this->getOptions(
-            'Detail\Apigility\Options\ModuleOptions',
+            ModuleOptions::CLASS,
             array(
                 'getNormalization',
                 'setNormalization',
@@ -28,6 +31,6 @@ class ModuleOptionsTest extends OptionsTestCase
 
         $normalization = $this->options->getNormalization();
 
-        $this->assertInstanceOf('Detail\Apigility\Options\Normalization\NormalizationOptions', $normalization);
+        $this->assertInstanceOf(NormalizationOptions::CLASS, $normalization);
     }
 }

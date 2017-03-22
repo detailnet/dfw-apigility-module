@@ -46,12 +46,7 @@ class NormalizationGroupsProvider implements
         if ($object instanceof HalCollection) {
             $groups[] = $object->getCollectionName();
         } elseif ($object instanceof HalEntity) {
-            // zf-hal:1.4.0 introduced a getter for entities and deprecated the access through the public property
-            if (method_exists($object, 'getEntity')) {
-                $entity = $object->getEntity();
-            } else {
-                $entity = $object->entity;
-            }
+            $entity = $object->getEntity();
 
             if (is_object($entity)) {
                 /** @var object $entity */

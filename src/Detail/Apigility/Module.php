@@ -10,7 +10,16 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ControllerProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceManager;
 use Zend\View\Model\ModelInterface as ViewModel;
+
+use ZF\Hal\Metadata\MetadataMap;
+use ZF\Hal\Plugin\Hal;
+
+use Detail\Apigility\Factory\Rest\Controller\RestControllerDelegatorFactory;
+use Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler;
+use Detail\Apigility\View\JsonStrategy;
+use Detail\Apigility\View\XmlStrategy;
 
 class Module implements
     AutoloaderProviderInterface,
@@ -23,11 +32,11 @@ class Module implements
      */
     public function onBootstrap(MvcEvent $event)
     {
-        /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
+        /** @var ServiceManager $serviceManager */
         $serviceManager = $event->getApplication()->getServiceManager();
 
         /** @var Options\ModuleOptions $moduleOptions */
-        $moduleOptions = $serviceManager->get(__NAMESPACE__ . '\Options\ModuleOptions');
+        $moduleOptions = $serviceManager->get(Options\ModuleOptions::CLASS);
 
         $config = $serviceManager->get('Config');
 
@@ -40,7 +49,7 @@ class Module implements
             foreach ($controllers as $controller) {
                 $serviceManager->get('ControllerManager')->addDelegator(
                     $controller,
-                    __NAMESPACE__ . '\Factory\Rest\Controller\RestControllerDelegatorFactory'
+                    RestControllerDelegatorFactory::CLASS
                 );
             }
         }
@@ -54,11 +63,11 @@ class Module implements
         ) {
             $hydratorClass = $config['zf-hal']['renderer']['default_hydrator'];
 
-            /** @var \ZF\Hal\Metadata\MetadataMap $metadataMap */
+            /** @var MetadataMap $metadataMap */
             $metadataMap = $serviceManager->get('ZF\Hal\MetadataMap');
             $metadataMap->getHydratorManager()->setFactory(
                 $hydratorClass,
-                function() use ($serviceManager, $hydratorClass) {
+                function () use ($serviceManager, $hydratorClass) {
                     return $serviceManager->get($hydratorClass);
                 }
             );
@@ -67,7 +76,7 @@ class Module implements
         $viewHelperManager = $serviceManager->get('ViewHelperManager');
 
         if ($viewHelperManager->has('Hal')) {
-            /** @var \ZF\Hal\Plugin\Hal $hal */
+            /** @var Hal $hal */
             $hal = $viewHelperManager->get('Hal');
 
             foreach ($moduleOptions->getHal()->getListeners() as $listenerClass) {
@@ -76,7 +85,7 @@ class Module implements
 
                 // The HAL plugin's EventManager instance does not compose a SharedEventManager,
                 // so we attach directly to it.
-                $hal->getEventManager()->attachAggregate($listener);
+                $listener->attach($hal->getEventManager());
             }
         }
 
@@ -97,13 +106,13 @@ class Module implements
      */
     public function onDispatch(MvcEvent $event)
     {
-        /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
+        /** @var ServiceManager $serviceManager */
         $serviceManager = $event->getApplication()->getServiceManager();
 
-        $halCollectionHandlerClass = __NAMESPACE__ . '\JMSSerializer\Handler\HalCollectionHandler';
+        $halCollectionHandlerClass = HalCollectionHandler::CLASS;
 
         if ($serviceManager->has($halCollectionHandlerClass)) {
-            /** @var \Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler $halCollectionHandler */
+            /** @var HalCollectionHandler $halCollectionHandler */
             $halCollectionHandler = $serviceManager->get($halCollectionHandlerClass);
 
             /** @var ViewModel|array|null|false $viewModel */
@@ -125,11 +134,11 @@ class Module implements
         if ($result instanceof View\JsonModel) {
             // Register at high priority, to "beat" normal HalJson and Json strategies registered
             // via view manager
-            $this->attachViewStrategy($event, __NAMESPACE__ . '\View\JsonStrategy', 300);
+            $this->attachViewStrategy($event, JsonStrategy::CLASS, 300);
         }
 
         if ($result instanceof View\XmlModel) {
-            $this->attachViewStrategy($event, __NAMESPACE__ . '\View\XmlStrategy');
+            $this->attachViewStrategy($event, XmlStrategy::CLASS);
         }
     }
 
@@ -172,12 +181,14 @@ class Module implements
      */
     protected function attachViewStrategy(MvcEvent $event, $class, $priority = 100)
     {
-        /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
+        /** @var ServiceManager $serviceManager */
         $serviceManager = $event->getTarget()->getServiceManager();
 
         /** @var \Zend\View\View $view */
         $view = $serviceManager->get('View');
-        $eventManager = $view->getEventManager();
-        $eventManager->attach($serviceManager->get($class), $priority);
+
+        /** @var ListenerAggregateInterface $listener */
+        $listener = $serviceManager->get($class);
+        $listener->attach($view->getEventManager(), $priority);
     }
 }

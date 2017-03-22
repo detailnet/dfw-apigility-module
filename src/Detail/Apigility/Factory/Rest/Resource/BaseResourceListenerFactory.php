@@ -2,22 +2,35 @@
 
 namespace Detail\Apigility\Factory\Rest\Resource;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+
+use Zend\ServiceManager\Factory\FactoryInterface;
+
+use Detail\Normalization\Normalizer\NormalizerInterface;
 
 use Detail\Apigility\Exception\ConfigException;
+use Detail\Apigility\Options\ModuleOptions;
+use Detail\Apigility\Rest\Resource\BaseResourceListener;
 
 abstract class BaseResourceListenerFactory implements
     FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * Create resource listener
+     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return BaseResourceListener
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
-        $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+        /** @var ModuleOptions $moduleOptions */
+        $moduleOptions = $container->get(ModuleOptions::CLASS);
         $normalizationOptions = $moduleOptions->getNormalization();
 
-        /** @var \Detail\Normalization\Normalizer\NormalizerInterface $normalizer */
-        $normalizer = $serviceLocator->get($normalizationOptions->getNormalizer());
+        /** @var NormalizerInterface $normalizer */
+        $normalizer = $container->get($normalizationOptions->getNormalizer());
 
         $listenerClass = $this->getListenerClass();
 
@@ -30,11 +43,11 @@ abstract class BaseResourceListenerFactory implements
             );
         }
 
-        /** @var \Detail\Apigility\Rest\Resource\BaseResourceListener $listener */
+        /** @var BaseResourceListener $listener */
         $listener = new $listenerClass($normalizer);
 
         // Always apply paging related settings from controller (config) to listener
-        $controllerConfig = $this->getRestControllerConfig($serviceLocator, $listenerClass);
+        $controllerConfig = $this->getRestControllerConfig($container, $listenerClass);
 
         if (isset($controllerConfig['page_size'])) {
             $listener->setPageSize($controllerConfig['page_size']);
@@ -48,15 +61,15 @@ abstract class BaseResourceListenerFactory implements
     }
 
     /**
-     * Get ZF-REST's controller config for the given listener.
+     * Get ZF-REST's controller config for the given listener
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $container
      * @param string $listenerClass
      * @return array
      */
-    protected function getRestControllerConfig(ServiceLocatorInterface $serviceLocator, $listenerClass)
+    protected function getRestControllerConfig(ContainerInterface $container, $listenerClass)
     {
-        $config = $serviceLocator->get('Config');
+        $config = $container->get('Config');
 
         if (!isset($config['zf-rest'])) {
             return array();

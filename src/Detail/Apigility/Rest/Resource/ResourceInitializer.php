@@ -2,29 +2,27 @@
 
 namespace Detail\Apigility\Rest\Resource;
 
-use Zend\ServiceManager\InitializerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Interop\Container\ContainerInterface;
+
+use Zend\ServiceManager\Initializer\InitializerInterface;
+
+use Detail\Apigility\Options\ModuleOptions;
 
 class ResourceInitializer implements
     InitializerInterface
 {
     /**
-     * Initialize
+     * Initialize the given instance
      *
-     * @param $instance
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ContainerInterface $container
+     * @param object $instance
+     * @return void
      */
-    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $instance)
     {
         if ($instance instanceof BaseResourceListener) {
-            if ($serviceLocator instanceof ServiceLocatorAwareInterface) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-
-            /** @var \Detail\Apigility\Options\ModuleOptions $moduleOptions */
-            $moduleOptions = $serviceLocator->get('Detail\Apigility\Options\ModuleOptions');
+            /** @var ModuleOptions $moduleOptions */
+            $moduleOptions = $container->get(ModuleOptions::CLASS);
 
             $requestCommandMap = $moduleOptions->getRequestCommandMap($instance);
 

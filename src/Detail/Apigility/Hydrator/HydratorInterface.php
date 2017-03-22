@@ -2,7 +2,7 @@
 
 namespace Detail\Apigility\Hydrator;
 
-use Zend\Stdlib\Hydrator\HydratorInterface as BaseHydratorInterface;
+use Zend\Hydrator\HydratorInterface as BaseHydratorInterface;
 
 interface HydratorInterface extends BaseHydratorInterface
 {

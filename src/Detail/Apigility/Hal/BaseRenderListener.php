@@ -21,8 +21,9 @@ abstract class BaseRenderListener implements
      * events of ZF\Hal\Plugin\Hal.
      *
      * @param EventManagerInterface $eventManager
+     * @param integer $priority
      */
-    public function attach(EventManagerInterface $eventManager)
+    public function attach(EventManagerInterface $eventManager, $priority = 1)
     {
         $this->listeners[] = $eventManager->attach(
             'renderCollection',
@@ -50,9 +51,9 @@ abstract class BaseRenderListener implements
     public function detach(EventManagerInterface $eventManager)
     {
         foreach ($this->listeners as $index => $listener) {
-            if ($eventManager->detach($listener)) {
-                unset($listener[$index]);
-            }
+            $eventManager->detach($listener);
+
+            unset($listener[$index]);
         }
     }
 

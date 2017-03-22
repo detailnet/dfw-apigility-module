@@ -27,12 +27,7 @@ trait NormalizerBasedRendererTrait
         if ($model->isEntity()) {
             /** @var \ZF\Hal\Entity $halEntity */
             $halEntity = $model->getPayload();
-            // zf-hal:1.4.0 introduced a getter for entities and deprecated the access through the public property
-            if (method_exists($halEntity, 'getEntity')) {
-                $entity = $halEntity->getEntity();
-            } else {
-                $entity = $halEntity->entity;
-            }
+            $entity = $halEntity->getEntity();
 
             $normalizationGroups = $this->getNormalizationGroups($halEntity);
 
