@@ -67,7 +67,7 @@ class Module implements
             $metadataMap = $serviceManager->get('ZF\Hal\MetadataMap');
             $metadataMap->getHydratorManager()->setFactory(
                 $hydratorClass,
-                function() use ($serviceManager, $hydratorClass) {
+                function () use ($serviceManager, $hydratorClass) {
                     return $serviceManager->get($hydratorClass);
                 }
             );
