@@ -322,9 +322,9 @@ class BaseResourceListener extends AbstractResourceListener implements
         if ($params[$pageSizeParam] != -1) {
             $params['limit']  = $params[$pageSizeParam];
             $params['offset'] = ($params[$pageParam] - 1) * $params[$pageSizeParam];
-        }
 
-        unset($params[$pageParam], $params[$pageSizeParam]);
+            unset($params[$pageParam], $params[$pageSizeParam]);
+        }
 
         return $params;
     }
