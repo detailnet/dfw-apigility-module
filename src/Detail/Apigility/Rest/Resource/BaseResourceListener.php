@@ -277,7 +277,7 @@ class BaseResourceListener extends AbstractResourceListener implements
         if ($translateDecoded === true) {
             foreach ($params as $key => $value) {
                 // Try to detect JSON...
-                if (is_string($value) && in_array($value[0], array('[', '{'))) {
+                if (is_string($value) && strlen($value) > 0 && in_array($value[0], array('[', '{'))) {
                     try {
                         $params[$key] = $this->decodeJson($value);
                     } catch (Exception\RuntimeException $e) {
@@ -324,9 +324,9 @@ class BaseResourceListener extends AbstractResourceListener implements
         if ($params[$pageSizeParam] != -1) {
             $params['limit']  = $params[$pageSizeParam];
             $params['offset'] = ($params[$pageParam] - 1) * $params[$pageSizeParam];
-        }
 
-        unset($params[$pageParam], $params[$pageSizeParam]);
+            unset($params[$pageParam], $params[$pageSizeParam]);
+        }
 
         return $params;
     }
