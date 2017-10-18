@@ -310,18 +310,13 @@ class BaseResourceListener extends AbstractResourceListener implements
         $pageParam = $this->getPageParam();
         $pageSizeParam = $this->getPageSizeParam();
 
-        if (!isset($params[$pageParam])) {
-            $params[$pageParam] = 1;
-        }
-
-        if (!isset($params[$pageSizeParam])) {
-            $params[$pageSizeParam] = $this->getPageSize();
-        }
+        $page = isset($params[$pageParam]) ? $params[$pageParam] : 1;
+        $pageSize = isset($params[$pageSizeParam]) ? $params[$pageSizeParam] : $this->getPageSize();
 
         // Only define limit and offset when the page size it not set to unlimited
-        if ($params[$pageSizeParam] != -1) {
-            $params['limit']  = $params[$pageSizeParam];
-            $params['offset'] = ($params[$pageParam] - 1) * $params[$pageSizeParam];
+        if ($pageSize != -1) {
+            $params['limit']  = $pageSize;
+            $params['offset'] = ($page - 1) * $pageSize;
 
             unset($params[$pageParam], $params[$pageSizeParam]);
         }
