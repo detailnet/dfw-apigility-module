@@ -1,11 +1,10 @@
 <?php
 
-return array(
-    'detail_apigility' => array(
-        'request_command_map' => array(),
-        'hal' => array(
-            'listeners' => array(
-            ),
-        ),
-    ),
-);
+return [
+    'detail_apigility' => [
+        'request_command_map' => [],
+        'hal' => [
+            'listeners' => [],
+        ],
+    ],
+];

@@ -1,5 +1,2 @@
 *
-!config
-!config/*
-!logs
 !.gitignore
