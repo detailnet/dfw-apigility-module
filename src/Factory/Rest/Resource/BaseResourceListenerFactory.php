@@ -4,11 +4,11 @@ namespace Detail\Apigility\Factory\Rest\Resource;
 
 use Interop\Container\ContainerInterface;
 
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 use Detail\Normalization\Normalizer\NormalizerInterface;
 
-use Detail\Apigility\Exception\ConfigException;
 use Detail\Apigility\Options\ModuleOptions;
 use Detail\Apigility\Rest\Resource\BaseResourceListener;
 
@@ -35,7 +35,7 @@ abstract class BaseResourceListenerFactory implements
         $listenerClass = $this->getListenerClass();
 
         if (!class_exists($listenerClass)) {
-            throw new ConfigException(
+            throw new ServiceNotCreatedException(
                 sprintf(
                     'Invalid listener class "%s" specified; must be a valid class name',
                     $listenerClass

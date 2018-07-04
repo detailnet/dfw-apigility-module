@@ -4,9 +4,9 @@ namespace Detail\Apigility\Factory\Options;
 
 use Interop\Container\ContainerInterface;
 
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-use Detail\Apigility\Exception\ConfigException;
 use Detail\Apigility\Options\ModuleOptions;
 
 class ModuleOptionsFactory implements FactoryInterface
@@ -24,7 +24,7 @@ class ModuleOptionsFactory implements FactoryInterface
         $config = $container->get('Config');
 
         if (!isset($config['detail_apigility'])) {
-            throw new ConfigException('Config for Detail\Apigility is not set');
+            throw new ServiceNotCreatedException('Config for Detail\Apigility is not set');
         }
 
         return new ModuleOptions($config['detail_apigility']);

@@ -335,7 +335,7 @@ class BaseResourceListener extends AbstractResourceListener implements
         $normalizer = $this->getNormalizer();
 
         if ($normalizer === null) {
-            throw new Exception\ConfigException(
+            throw new Exception\RuntimeException(
                 'Cannot use request to command mapping; no Normalizer provided'
             );
         }
@@ -343,7 +343,7 @@ class BaseResourceListener extends AbstractResourceListener implements
         $commandMapping = $this->getRequestCommandMapping($event->getName());
 
         if (!isset($commandMapping['command_class'])) {
-            throw new Exception\ConfigException(
+            throw new Exception\RuntimeException(
                 sprintf(
                     'Invalid request to command mapping configuration for event "%s"',
                     $event->getName()
