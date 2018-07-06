@@ -130,7 +130,7 @@ class Module implements
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    protected function attachViewStrategy(MvcEvent $event, string $class, ?integer $priority = null): void
+    private function attachViewStrategy(MvcEvent $event, string $class, ?int $priority = null): void
     {
         /** @var ServiceManager $serviceManager */
         $serviceManager = $event->getTarget()->getServiceManager();
