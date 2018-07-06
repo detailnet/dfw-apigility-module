@@ -2,10 +2,6 @@
 
 return [
     'service_manager' => [
-        'abstract_factories' => [
-        ],
-        'aliases' => [
-        ],
         'invokables' => [
             'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler' =>
                 'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler',
@@ -36,8 +32,6 @@ return [
         'initializers' => [
             'Detail\Apigility\Rest\Resource\ResourceInitializer',
         ],
-        'shared' => [
-        ],
     ],
     'controllers' => [
         'initializers' => [
@@ -48,6 +42,11 @@ return [
             'subscribers' => [
                 'Detail\Apigility\JMSSerializer\Handler\HalCollectionHandler',
             ],
+        ],
+        'eventdispatcher' => [
+            'subscribers' => [
+                Detail\Normalization\JMSSerializer\EventDispatcher\Subscriber\DoctrineProxySubscriber::CLASS,
+            ]
         ],
     ],
     'zf-hal' => [
