@@ -172,7 +172,7 @@ class BaseResourceListener extends AbstractResourceListener implements
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        parent::attach($events);
+        parent::attach($events, $priority);
 
         $events->attach('patchMultiple', [$this, 'dispatch']);
     }

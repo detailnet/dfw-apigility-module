@@ -38,11 +38,11 @@ class Resource extends BaseResource
         $events = $this->getEventManager();
         $event = $this->prepareEvent(__FUNCTION__, ['ids' => $ids, 'data' => $data]);
 
-        $results = $events->trigger(
-            $event,
+        $results = $events->triggerEventUntil(
             function ($result) {
                 return ($result instanceof ApiProblem || $result instanceof ApiProblemResponse);
-            }
+            },
+            $event
         );
 
         $last = $results->last();
