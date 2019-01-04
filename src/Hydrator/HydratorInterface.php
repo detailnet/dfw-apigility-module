@@ -12,7 +12,7 @@ interface HydratorInterface extends BaseHydratorInterface
      * @param object $object
      * @return array
      */
-    public function extract(object $object);
+    public function extract(object $object): array;
 
     /**
      * Hydrate object with the provided data.

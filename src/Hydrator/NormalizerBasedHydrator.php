@@ -55,7 +55,7 @@ class NormalizerBasedHydrator implements
      * @param object $object
      * @return array
      */
-    public function extract(object $object)
+    public function extract(object $object): array
     {
         $groups = $this->getGroups();
 
