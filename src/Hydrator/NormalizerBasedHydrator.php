@@ -53,15 +53,13 @@ class NormalizerBasedHydrator implements
      * Extract values from the provided object.
      *
      * @param object $object
-     * @param array|string $groups
-     * @param string|integer $version
      * @return array
      */
-    public function extract($object, $groups = null, $version = null)
+    public function extract(object $object)
     {
-        $groups = $this->getGroups($groups);
+        $groups = $this->getGroups();
 
-        return $this->normalizer->normalize($object, $groups, $version);
+        return $this->normalizer->normalize($object, $groups);
     }
 
     /**
@@ -69,16 +67,14 @@ class NormalizerBasedHydrator implements
      *
      * @param array $data
      * @param object $object
-     * @param array|string $groups
-     * @param string|integer $version
      * @return object
      */
-    public function hydrate(array $data, $object, $groups = null, $version = null)
+    public function hydrate(array $data, object $object)
     {
         $class = get_class($object);
-        $groups = $this->getGroups($groups);
+        $groups = $this->getGroups();
 
-        return $this->normalizer->denormalize($data, $class, $groups, $version);
+        return $this->normalizer->denormalize($data, $class, $groups);
     }
 
     /**

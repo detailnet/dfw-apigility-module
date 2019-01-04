@@ -392,7 +392,10 @@ class BaseResourceListener extends AbstractResourceListener implements
         }
 
         /** @todo The normalizer should know from which version to denormalize from */
-        return $normalizer->denormalize($data, $commandClass);
+        /** @var CommandInterface $command */
+        $command = $normalizer->denormalize($data, $commandClass);
+
+        return $command;
     }
 
     /**

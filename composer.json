@@ -18,7 +18,8 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
+        "ext-json": "*",
         "zendframework/zend-loader": "^2.5.1",
         "zendframework/zend-modulemanager": "^2.7.2",
         "zendframework/zend-mvc": "^3.0.1",
