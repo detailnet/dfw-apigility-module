@@ -2,8 +2,6 @@
 
 namespace Detail\Apigility\Rest\Resource;
 
-use ZF\ApiProblem\ApiProblem;
-use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\Resource as BaseResource;
 
 use Detail\Apigility\Exception;
@@ -29,22 +27,14 @@ class Resource extends BaseResource
         if (!is_object($data)) {
             throw new Exception\InvalidArgumentException(
                 sprintf(
-                    'Data provided to create must be either an array or object; received "%s"',
+                    'Data provided to %s must be either an array or object; received "%s"',
+                    __FUNCTION__,
                     gettype($data)
                 )
             );
         }
 
-        $events = $this->getEventManager();
-        $event = $this->prepareEvent(__FUNCTION__, ['ids' => $ids, 'data' => $data]);
-
-        $results = $events->triggerEventUntil(
-            function ($result) {
-                return ($result instanceof ApiProblem || $result instanceof ApiProblemResponse);
-            },
-            $event
-        );
-
+        $results = $this->triggerEvent(__FUNCTION__, ['ids' => $ids, 'data' => $data]);
         $last = $results->last();
 
         if (!is_array($last) && !is_object($last)) {
