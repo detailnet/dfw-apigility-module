@@ -7,12 +7,12 @@ env:
 
 matrix:
   include:
-    - php: 7.1
+    - php: 7.2
       env:
         - CS_CHECK=true
         - MD_CHECK=true
         - TEST_COVERAGE=true
-    - php: 7.2
+    - php: 7.3
 
 before_install:
 #  - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
