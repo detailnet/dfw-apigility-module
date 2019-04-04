@@ -168,8 +168,9 @@ class BaseResourceListener extends AbstractResourceListener implements
      * Attach listeners for all Resource events
      *
      * @param EventManagerInterface $events
+     * @param int $priority
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         parent::attach($events);
 
