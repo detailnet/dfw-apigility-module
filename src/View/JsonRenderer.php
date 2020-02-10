@@ -10,7 +10,6 @@ use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 use Detail\Normalization\Normalizer\NormalizerAwareInterface;
 use Detail\Normalization\Normalizer\NormalizerInterface;
 
-
 class JsonRenderer extends BaseJsonRenderer implements
     NormalizerAwareInterface,
     NormalizationGroupsProviderAwareInterface,
