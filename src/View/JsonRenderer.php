@@ -4,16 +4,17 @@ namespace Detail\Apigility\View;
 
 use Zend\View\Model\ModelInterface as ZendModelInterface;
 use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
-
+use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderByString;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 use Detail\Normalization\Normalizer\NormalizerAwareInterface;
 use Detail\Normalization\Normalizer\NormalizerInterface;
 
-use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
-use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 
 class JsonRenderer extends BaseJsonRenderer implements
     NormalizerAwareInterface,
-    NormalizationGroupsProviderAwareInterface
+    NormalizationGroupsProviderAwareInterface,
+    AcceptsNormalizationGroups
 {
     use NormalizerBasedRendererTrait;
 
@@ -50,5 +51,13 @@ class JsonRenderer extends BaseJsonRenderer implements
         }
 
         return parent::render($nameOrModel, $values);
+    }
+
+    public function setNormalizationGroups(array $normalizationGroups): void
+    {
+        // Set own groups provider
+        $this->setNormalizationGroupsProvider(
+            new NormalizationGroupsProviderByString($normalizationGroups)
+        );
     }
 }
