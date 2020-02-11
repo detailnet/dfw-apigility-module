@@ -26,7 +26,6 @@ class NormalizationGroupsProviderByStringTest extends TestCase
                 'FooBar,fooBar',
                 ['Default', 'foobar', 'foobar'],
             ],
-
         ];
     }
 
