@@ -2,18 +2,18 @@
 
 namespace Detail\Apigility\View;
 
-use Zend\View\Model\ModelInterface as ZendModelInterface;
-use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderByString;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 use Detail\Normalization\Normalizer\NormalizerAwareInterface;
 use Detail\Normalization\Normalizer\NormalizerInterface;
+use Zend\View\Model\ModelInterface as ZendModelInterface;
+use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
 
 class JsonRenderer extends BaseJsonRenderer implements
+    AcceptsNormalizationGroups,
     NormalizerAwareInterface,
-    NormalizationGroupsProviderAwareInterface,
-    AcceptsNormalizationGroups
+    NormalizationGroupsProviderAwareInterface
 {
     use NormalizerBasedRendererTrait;
 

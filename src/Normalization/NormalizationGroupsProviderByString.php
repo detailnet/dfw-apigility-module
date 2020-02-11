@@ -2,10 +2,8 @@
 
 namespace Detail\Apigility\Normalization;
 
-use ReflectionClass;
-
-use ZF\Hal\Collection as HalCollection;
-use ZF\Hal\Entity as HalEntity;
+use function preg_replace;
+use function strtolower;
 
 class NormalizationGroupsProviderByString implements
     NormalizationGroupsProviderInterface
@@ -25,7 +23,7 @@ class NormalizationGroupsProviderByString implements
     public function __construct(array $groups)
     {
         foreach ($groups as $group) {
-            $this->groups[] = $group;
+            $this->groups[] = $this->sanitizeGroup($group);
         }
     }
 
@@ -36,5 +34,11 @@ class NormalizationGroupsProviderByString implements
     public function getGroups($object)
     {
         return $this->groups;
+    }
+
+    private function sanitizeGroup(string $group): string
+    {
+        /** @todo Support camelCase to snake_case conversion? */
+        return preg_replace('/[^a-z0-9_.]/', '', strtolower($group));
     }
 }
