@@ -13,7 +13,7 @@ class JsonRendererTest extends TestCase
     public function provideEntitiesAndGroups(): \Generator
     {
         // First two tests are same as in \DetailTest\Apigility\Normalization\NormalizationGroupsProviderTest::testProperGroupNameForEntity
-        // Needed here to test hat the 'normalisation groups' extension does not mess up when no 'normalisation groups' is provided
+        // Needed here to test that the 'normalisation groups' extension does not mess up when no 'normalisation groups' is provided
         yield 'Without own normalisation groups' => [
             'Foo',
             null,

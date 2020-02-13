@@ -56,6 +56,9 @@ class JsonRenderer extends BaseJsonRenderer implements
         return parent::render($nameOrModel, $values);
     }
 
+    /**
+     * @param string[]|null $normalizationGroups
+     */
     public function setNormalizationGroups(?array $normalizationGroups): void
     {
         if ($normalizationGroups === null) {
@@ -64,10 +67,9 @@ class JsonRenderer extends BaseJsonRenderer implements
             return;
         }
 
-        // First get the normalization group default ones
+        // First assign the group provider's default groups
         $this->normalizationGroups = $this->getNormalizationGroupsProvider()->getDefaultGroups();
 
-        // Validate and apply own normalization groups
         foreach ($normalizationGroups as $normalizationGroup) {
             $this->normalizationGroups[] = (string) $normalizationGroup;
         }
