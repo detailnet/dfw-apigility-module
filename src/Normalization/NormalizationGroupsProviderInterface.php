@@ -9,4 +9,9 @@ interface NormalizationGroupsProviderInterface
      * @return array
      */
     public function getGroups($object);
+
+    /**
+     * @return string[]
+     */
+    public function getDefaultGroups(): array;
 }

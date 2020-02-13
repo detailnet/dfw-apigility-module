@@ -3,7 +3,6 @@
 namespace Detail\Apigility\View;
 
 use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
-use Detail\Apigility\Normalization\NormalizationGroupsProviderByString;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
 use Detail\Normalization\Normalizer\NormalizerAwareInterface;
 use Detail\Normalization\Normalizer\NormalizerInterface;
@@ -15,7 +14,10 @@ class JsonRenderer extends BaseJsonRenderer implements
     NormalizerAwareInterface,
     NormalizationGroupsProviderAwareInterface
 {
-    use NormalizerBasedRendererTrait;
+    use NormalizerBasedRendererTrait {getNormalizationGroups as private getObjectNormalizationGroups; }
+
+    /** @var string[]|null */
+    private $normalizationGroups;
 
     /**
      * @param NormalizerInterface $normalizer
@@ -52,11 +54,30 @@ class JsonRenderer extends BaseJsonRenderer implements
         return parent::render($nameOrModel, $values);
     }
 
-    public function setNormalizationGroups(array $normalizationGroups): void
+    public function setNormalizationGroups(?array $normalizationGroups): void
     {
-        // Set own groups provider
-        $this->setNormalizationGroupsProvider(
-            new NormalizationGroupsProviderByString($normalizationGroups)
-        );
+        if ($normalizationGroups === null) {
+            $this->normalizationGroups = null;
+
+            return;
+        }
+
+        // First get the normalization group default ones
+        $this->normalizationGroups = $this->getNormalizationGroupsProvider()->getDefaultGroups();
+
+        // Validate and apply own normalization groups
+        foreach ($normalizationGroups as $normalizationGroup) {
+            $this->normalizationGroups[] = (string) $normalizationGroup;
+        }
+    }
+
+    /**
+     * @param mixed $object
+     * @return array|null
+     */
+    protected function getNormalizationGroups($object)
+    {
+        // Own normalization groups take precedence over group-provider defined ones
+        return $this->normalizationGroups ?? $this->getObjectNormalizationGroups($object);
     }
 }

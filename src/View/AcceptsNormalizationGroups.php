@@ -4,5 +4,5 @@ namespace Detail\Apigility\View;
 
 interface AcceptsNormalizationGroups
 {
-    public function setNormalizationGroups(array $groups): void;
+    public function setNormalizationGroups(?array $groups): void;
 }

@@ -22,7 +22,7 @@ class NormalizationGroupsProvider implements
     /**
      * @return string[]
      */
-    public function getDefaultGroups()
+    public function getDefaultGroups(): array
     {
         return $this->defaultGroups;
     }
