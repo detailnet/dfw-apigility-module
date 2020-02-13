@@ -14,7 +14,9 @@ class JsonRenderer extends BaseJsonRenderer implements
     NormalizerAwareInterface,
     NormalizationGroupsProviderAwareInterface
 {
-    use NormalizerBasedRendererTrait {getNormalizationGroups as private getObjectNormalizationGroups; }
+    use NormalizerBasedRendererTrait {
+        getNormalizationGroups as private getObjectNormalizationGroups;
+    }
 
     /** @var string[]|null */
     private $normalizationGroups;

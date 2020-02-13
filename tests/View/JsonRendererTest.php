@@ -70,11 +70,11 @@ class JsonRendererTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('normalize')
             ->willReturnCallback(
-                  function ($object, $groups = null) use ($expectedGroups) { // Return type not important, should be :array|string
-                      $this->assertEquals($expectedGroups, $groups, 'Groups passed to normalization do not match');
+                function ($object, $groups = null) use ($expectedGroups) {
+                    $this->assertEquals($expectedGroups, $groups, 'Groups passed to normalization do not match');
 
-                      return '';
-                  }
+                    return ''; // Return type not important, should be :array|string
+                }
             );
 
         /** @var JsonRenderer $renderer */
