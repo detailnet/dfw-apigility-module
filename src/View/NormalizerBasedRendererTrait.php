@@ -7,6 +7,7 @@ use Countable;
 use Zend\Paginator\Paginator;
 
 use ZF\Hal\Collection as HalCollection;
+use ZF\Hal\Entity as HalEntity;
 
 use Detail\Apigility\Exception;
 use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareTrait;
@@ -19,17 +20,18 @@ trait NormalizerBasedRendererTrait
     use NormalizationGroupsProviderAwareTrait;
 
     /**
-     * @param ModelInterface $model
      * @return array|string|null
      */
-    protected function normalizeEntityOrCollection(ModelInterface $model)
+    protected function normalizeEntityOrCollection(ModelInterface $model, ?array $normalizationGroups = null)
     {
         if ($model->isEntity()) {
-            /** @var \ZF\Hal\Entity $halEntity */
+            /** @var HalEntity $halEntity */
             $halEntity = $model->getPayload();
             $entity = $halEntity->getEntity();
 
-            $normalizationGroups = $this->getNormalizationGroups($halEntity);
+            if ($normalizationGroups === null) {
+                $normalizationGroups = $this->provideNormalizationGroupsFor($halEntity);
+            }
 
             return $this->normalize($entity, $normalizationGroups);
         }
@@ -38,22 +40,24 @@ trait NormalizerBasedRendererTrait
             /** @var HalCollection $collection */
             $collection = $model->getPayload();
 
-            return $this->normalizeCollection($collection);
+            return $this->normalizeCollection($collection, $normalizationGroups);
         }
 
         return null;
     }
 
     /**
-     * @param HalCollection $halCollection
      * @return array|string
      */
-    protected function normalizeCollection(HalCollection $halCollection)
+    protected function normalizeCollection(HalCollection $halCollection, ?array $normalizationGroups = null)
     {
         $collection = $halCollection->getCollection();
         $collectionName = $halCollection->getCollectionName();
         $attributes = $halCollection->getAttributes();
-        $normalizationGroups = $this->getNormalizationGroups($halCollection);
+
+        if ($normalizationGroups === null) {
+            $normalizationGroups = $this->provideNormalizationGroupsFor($halCollection);
+        }
 
         if ($collection instanceof Paginator) {
             $pageSize = (int) (isset($attributes['page_size']) ? $attributes['page_size'] : $halCollection->getPageSize());
@@ -114,9 +118,8 @@ trait NormalizerBasedRendererTrait
 
     /**
      * @param mixed $object
-     * @return array|null
      */
-    protected function getNormalizationGroups($object)
+    protected function provideNormalizationGroupsFor($object): ?array
     {
         $groupsProvider = $this->getNormalizationGroupsProvider();
 
@@ -126,7 +129,7 @@ trait NormalizerBasedRendererTrait
 
         return $groupsProvider->getGroups($object);
     }
-    
+
     /**
      * @return string|null
      */

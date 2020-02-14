@@ -40,17 +40,13 @@ class JsonRendererTest extends TestCase
     }
 
     /**
-     * @param string $entityName
-     * @param array|null $normalizationGroups
-     * @param array $expectedGroups
      * @dataProvider provideEntitiesAndGroups
      */
-    public function testProperGroupNameForEntity($entityName, ?array $normalizationGroups, array $expectedGroups)
+    public function testUsesCorrectGroupsForEntity(string $entityName, ?array $normalizationGroups, array $expectedGroups): void
     {
         $provider = $this->getMockBuilder(NormalizationGroupsProvider::CLASS)
             ->setMethods(['getEntityName'])
             ->getMock();
-
         $provider
             ->expects($this->any())
             ->method('getEntityName')
@@ -60,12 +56,10 @@ class JsonRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getNormalizationGroupsProvider', 'normalize'])
             ->getMock();
-
         $renderer
             ->expects($this->any())
             ->method('getNormalizationGroupsProvider')
             ->will($this->returnValue($provider));
-
         $renderer
             ->expects($this->atLeastOnce())
             ->method('normalize')

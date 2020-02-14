@@ -14,9 +14,7 @@ class JsonRenderer extends BaseJsonRenderer implements
     NormalizerAwareInterface,
     NormalizationGroupsProviderAwareInterface
 {
-    use NormalizerBasedRendererTrait {
-        getNormalizationGroups as private getObjectNormalizationGroups;
-    }
+    use NormalizerBasedRendererTrait;
 
     /** @var string[]|null */
     private $normalizationGroups;
@@ -47,7 +45,7 @@ class JsonRenderer extends BaseJsonRenderer implements
             return parent::render($nameOrModel, $values);
         }
 
-        $payload = $this->normalizeEntityOrCollection($nameOrModel);
+        $payload = $this->normalizeEntityOrCollection($nameOrModel, $this->getNormalizationGroups());
 
         if ($payload !== null) {
             return parent::render($payload);
@@ -61,27 +59,26 @@ class JsonRenderer extends BaseJsonRenderer implements
      */
     public function setNormalizationGroups(?array $normalizationGroups): void
     {
-        if ($normalizationGroups === null) {
-            $this->normalizationGroups = null;
-
-            return;
-        }
-
-        // First assign the group provider's default groups
-        $this->normalizationGroups = $this->getNormalizationGroupsProvider()->getDefaultGroups();
-
-        foreach ($normalizationGroups as $normalizationGroup) {
-            $this->normalizationGroups[] = (string) $normalizationGroup;
-        }
+        $this->normalizationGroups = $normalizationGroups;
     }
 
-    /**
-     * @param mixed $object
-     * @return array|null
-     */
-    protected function getNormalizationGroups($object)
+    private function getNormalizationGroups(): ?array
     {
-        // Own normalization groups take precedence over group-provider defined ones
-        return $this->normalizationGroups ?? $this->getObjectNormalizationGroups($object);
+        if (!is_array($this->normalizationGroups)) {
+            return null;
+        }
+
+        $groups = $this->normalizationGroups;
+
+        if ($this->getNormalizationGroupsProvider() !== null) {
+            $groups = array_unique(
+                array_merge(
+                    $this->getNormalizationGroupsProvider()->getDefaultGroups(),
+                    $groups
+                )
+            );
+        }
+
+        return $groups;
     }
 }
