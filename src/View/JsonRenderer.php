@@ -2,20 +2,24 @@
 
 namespace Detail\Apigility\View;
 
+use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
+use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
+use Detail\Normalization\Normalizer\NormalizerAwareInterface;
+use Detail\Normalization\Normalizer\NormalizerInterface;
 use Zend\View\Model\ModelInterface as ZendModelInterface;
 use Zend\View\Renderer\JsonRenderer as BaseJsonRenderer;
 
-use Detail\Normalization\Normalizer\NormalizerAwareInterface;
-use Detail\Normalization\Normalizer\NormalizerInterface;
-
-use Detail\Apigility\Normalization\NormalizationGroupsProviderAwareInterface;
-use Detail\Apigility\Normalization\NormalizationGroupsProviderInterface;
-
 class JsonRenderer extends BaseJsonRenderer implements
+    AcceptsNormalizationGroups,
     NormalizerAwareInterface,
     NormalizationGroupsProviderAwareInterface
 {
-    use NormalizerBasedRendererTrait;
+    use NormalizerBasedRendererTrait {
+        getNormalizationGroups as private getObjectNormalizationGroups;
+    }
+
+    /** @var string[]|null */
+    private $normalizationGroups;
 
     /**
      * @param NormalizerInterface $normalizer
@@ -50,5 +54,34 @@ class JsonRenderer extends BaseJsonRenderer implements
         }
 
         return parent::render($nameOrModel, $values);
+    }
+
+    /**
+     * @param string[]|null $normalizationGroups
+     */
+    public function setNormalizationGroups(?array $normalizationGroups): void
+    {
+        if ($normalizationGroups === null) {
+            $this->normalizationGroups = null;
+
+            return;
+        }
+
+        // First assign the group provider's default groups
+        $this->normalizationGroups = $this->getNormalizationGroupsProvider()->getDefaultGroups();
+
+        foreach ($normalizationGroups as $normalizationGroup) {
+            $this->normalizationGroups[] = (string) $normalizationGroup;
+        }
+    }
+
+    /**
+     * @param mixed $object
+     * @return array|null
+     */
+    protected function getNormalizationGroups($object)
+    {
+        // Own normalization groups take precedence over group-provider defined ones
+        return $this->normalizationGroups ?? $this->getObjectNormalizationGroups($object);
     }
 }
