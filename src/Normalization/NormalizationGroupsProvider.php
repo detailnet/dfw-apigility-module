@@ -37,7 +37,7 @@ class NormalizationGroupsProvider implements
 
     /**
      * @param mixed $object
-     * @return array
+     * @return string[]
      */
     public function getGroups($object)
     {
